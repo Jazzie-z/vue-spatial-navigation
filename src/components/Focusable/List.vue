@@ -23,6 +23,7 @@
 
 <script>
 import { enableNavigation, disableNavigation } from "@/focus/event";
+import { focusHandler } from "@/main";
 
 export default {
   props: {
@@ -108,6 +109,12 @@ export default {
         negative
       );
     },
+    resetFocus({ force }) {
+      if (force || !this.isFocused) {
+        this.focusedIndex = 0;
+        this.scrollAmount = 0;
+      }
+    },
   },
   updated() {
     this.handleFocusLost();
@@ -130,9 +137,11 @@ export default {
       },
       preCondition: () => this.isFocused && !this.disabled,
     });
+    focusHandler.$on("RESET_FOCUS", this.resetFocus);
   },
   destroyed() {
     disableNavigation(`list-${this.id}`);
+    focusHandler.$off("RESET_FOCUS", this.resetFocus);
   },
 };
 </script>

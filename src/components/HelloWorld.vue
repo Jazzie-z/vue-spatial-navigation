@@ -2,14 +2,14 @@
   <div>
     <Grid
       :child="child"
+      v-if="false"
       :isFocused="true"
       :items="gridItems"
       :shouldScroll="true"
     />
     <List
-      v-if="false"
       :child="childList"
-      :isFocused="false"
+      :isFocused="true"
       :items="listItems"
       orientation="VERTICAL"
       :shouldScroll="true"
@@ -25,6 +25,7 @@ import List from "@/components/Focusable/List";
 import Grid from "@/components/Focusable/Grid";
 import Card from "./Card";
 import { mockImage } from "@/mock";
+import { focusHandler } from "../main";
 export default {
   name: "HelloWorld",
   props: {
@@ -50,6 +51,10 @@ export default {
       ],
     };
   },
-  mounted() {},
+  mounted() {
+    setTimeout(() => {
+      focusHandler.$emit("RESET_FOCUS", { force: true });
+    }, 3000);
+  },
 };
 </script>

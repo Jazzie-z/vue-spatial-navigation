@@ -22,7 +22,8 @@
 </template>
 
 <script>
-import { enableNavigation } from "@/focus/event";
+import { enableNavigation, disableNavigation } from "@/focus/event";
+import { focusHandler } from "@/main";
 export default {
   props: {
     child: {
@@ -128,13 +129,20 @@ export default {
         this.focusedIndex = this.items.length - 1;
       }
     },
+    resetFocus({ force }) {
+      if (force || !this.isFocused) {
+        this.focusedIndex = 0;
+        this.activeColumn = 0;
+        this.activeRow = 0;
+        this.scrollAmount = 0;
+      }
+    },
   },
   updated() {
     this.handleFocusLost();
   },
   mounted() {
     enableNavigation({
-      id: `grid-${this.id}`,
       LEFT: () => {
         if (this.isPrevColumnPresent()) {
           this.updateColumn("reverse");
@@ -158,7 +166,13 @@ export default {
         }
       },
       preCondition: () => this.isFocused && !this.disabled,
+      id: `grid-${this.id}`,
     });
+    focusHandler.$on("RESET_FOCUS", this.resetFocus);
+  },
+  destroyed() {
+    disableNavigation(`grid-${this.id}`);
+    focusHandler.$off("RESET_FOCUS", this.resetFocus);
   },
 };
 </script>
