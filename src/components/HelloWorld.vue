@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div class="container">
+    <SideNav/>
     <Grid
       :child="child"
       v-if="false"
@@ -8,6 +9,7 @@
       :shouldScroll="true"
     />
     <List
+    v-if="false"
       :child="childList"
       :isFocused="true"
       :items="listItems"
@@ -15,6 +17,9 @@
       :shouldScroll="true"
       id="vertical"
     />
+    <div class="main-content">
+    <router-view></router-view>
+    </div>
     <!-- <List :child="child" :isFocused="true" :items="items" 
 orientation="HORIZONTAL" id='vertical2'
 /> -->
@@ -24,6 +29,7 @@ orientation="HORIZONTAL" id='vertical2'
 import List from "@/components/Focusable/List";
 import Grid from "@/components/Focusable/Grid";
 import Card from "./Card";
+import SideNav from "@/components/SideNav";
 import { mockImage } from "@/mock";
 import { focusHandler } from "../main";
 export default {
@@ -34,6 +40,7 @@ export default {
   components: {
     List,
     Grid,
+    SideNav
   },
   data() {
     return {
@@ -58,3 +65,15 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.container {
+  background:black;
+  height:100vh;
+  overflow: hidden;
+}
+.main-content{
+    display:flex;
+    flex-direction: column;
+    padding: 100px;
+}
+</style>
