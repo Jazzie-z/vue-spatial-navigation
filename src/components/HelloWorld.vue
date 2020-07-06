@@ -1,8 +1,15 @@
 <template>
   <div>
-    <List
-      :child="childList"
+    <Grid
+      :child="child"
       :isFocused="true"
+      :items="gridItems"
+      :shouldScroll="true"
+    />
+    <List
+      v-if="false"
+      :child="childList"
+      :isFocused="false"
       :items="listItems"
       orientation="VERTICAL"
       id="vertical"
@@ -14,6 +21,7 @@ orientation="HORIZONTAL" id='vertical2'
 </template>
 <script>
 import List from "@/components/Focusable/List";
+import Grid from "@/components/Focusable/Grid";
 import Card from "./Card";
 import { mockImage } from "@/mock";
 export default {
@@ -23,27 +31,20 @@ export default {
   },
   components: {
     List,
+    Grid,
   },
   data() {
     return {
       child: Card,
       childList: List,
       items: mockImage.map((item) => ({ items: item })),
+      gridItems: [...new Array(23)].map(() => ({ items: mockImage[0] })),
       listItems: [
         { child: Card, items: mockImage.map((item) => ({ items: item })) },
         { child: Card, items: mockImage.map((item) => ({ items: item })) },
       ],
     };
   },
-  mounted() {
-    // setTimeout(() => {
-    //   this.listItems.splice(0, 1);
-    //   // this.items.splice(0,1)
-    // }, 3000);
-    // setTimeout(() => {
-    //   this.listItems.splice(0, 1);
-    //   // this.items.splice(0,1)
-    // }, 5000);
-  },
+  mounted() {},
 };
 </script>

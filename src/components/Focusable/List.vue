@@ -11,11 +11,11 @@
       v-for="(item, index) in items"
       :key="index"
     >
-      <component        
-        :is="child"        
+      <component
+        :is="child"
         v-bind="item"
-        :id="`child${item.id || index}`"        
-        :isFocused="isFocused && index === focusedIndex"        
+        :id="`child${item.id || index}`"
+        :isFocused="isFocused && index === focusedIndex"
       />
     </div>
   </div>

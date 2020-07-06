@@ -17,7 +17,6 @@
         :id="item.id || index"
         :child="item.child"
         :isFocused="isFocused && index === focusedIndex"
-        :temp="items"
         :orientation="item.orientation"
         :shouldScroll="item.shouldScroll"
       />
@@ -53,7 +52,7 @@ export default {
     },
     maxColumn: {
       type: Number,
-      default: 5,
+      default: 6,
     },
     id: {
       //unique id to differentiate navigation
@@ -71,67 +70,85 @@ export default {
   computed: {
     style() {
       return {
-        transform: `translate${this.orientation === "VERTICAL" ? "Y" : "X"}(${
-          this.scrollAmount
-        }px)`,
+        transform: `translateY(${this.scrollAmount}px)`,
       };
     },
   },
   methods: {
-    getScrollAmountByOrientation: (el, orientation) => {
+    getScrollAmountByOrientation: (el, negative) => {
       if (el) {
-        return el[orientation === "VERTICAL" ? "clientHeight" : "clientWidth"];
+        let value = el.clientHeight;
+        return negative ? -value : value;
       }
       return 0;
+    },
+    isPrevColumnPresent() {
+      return this.focusedIndex > 0 && this.activeColumn > 0;
+    },
+    isNextColumnPresent() {
+      return (
+        this.focusedIndex < this.items.length - 1 &&
+        this.activeColumn < this.maxColumn - 1
+      );
+    },
+    isPrevRowPresent() {
+      return this.focusedIndex > 0 && this.activeRow > 0;
+    },
+    isNextRowPresent() {
+      return (
+        this.focusedIndex < this.items.length - 1 &&
+        this.activeRow < this.items.length / this.maxColumn - 1
+      );
+    },
+    updateColumn(reverse) {
+      let value = reverse ? -1 : 1;
+      this.focusedIndex += value;
+      this.activeColumn += value;
+    },
+    updateRow(reverse) {
+      let cardsPerColumn = reverse ? -this.maxColumn : this.maxColumn;
+      let value = reverse ? -1 : 1;
+      this.focusedIndex += cardsPerColumn;
+      this.activeRow += value;
+      if (this.isFocusIndexOutOfBound()) {
+        //UNEVEN LAST ROW
+        this.focusedIndex = this.items.length - 1;
+        this.activeColumn = (this.items.length - 1) % this.maxColumn;
+      }
+    },
+    isFocusIndexOutOfBound() {
+      return this.focusedIndex > this.items.length - 1;
+    },
+    updateScrollValue(negative) {
+      this.scrollAmount += this.getScrollAmountByOrientation(
+        this.$refs.childItem[this.focusedIndex],
+        negative
+      );
     },
   },
   mounted() {
     enableNavigation({
       id: `grid-${this.id}`,
       LEFT: () => {
-        if (this.focusedIndex > 0 && this.activeColumn > 0) {
-          this.focusedIndex -= 1;
-          if (this.shouldScroll)
-            this.scrollAmount += this.getScrollAmountByOrientation(
-              this.$refs.childItem[this.focusedIndex],
-              this.orientation
-            );
+        if (this.isPrevColumnPresent()) {
+          this.updateColumn("reverse");
         }
       },
       RIGHT: () => {
-        if (
-          this.focusedIndex < this.items.length - 1 &&
-          this.activeColumn < this.maxColumn - 1
-        ) {
-          this.focusedIndex += 1;
-          if (this.shouldScroll)
-            this.scrollAmount -= this.getScrollAmountByOrientation(
-              this.$refs.childItem[this.focusedIndex],
-              this.orientation
-            );
+        if (this.isNextColumnPresent()) {
+          this.updateColumn();
         }
       },
       UP: () => {
-        if (this.focusedIndex > 0 && this.activeRow > this.activeRow > 0) {
-          this.focusedIndex -= 1;
-          if (this.shouldScroll)
-            this.scrollAmount += this.getScrollAmountByOrientation(
-              this.$refs.childItem[this.focusedIndex],
-              this.orientation
-            );
+        if (this.isPrevRowPresent()) {
+          this.updateRow("reverse");
+          if (this.shouldScroll) this.updateScrollValue();
         }
       },
       DOWN: () => {
-        if (
-          this.focusedIndex < this.items.length - 1 &&
-          this.activeRow < this.items.length / this.column - 1
-        ) {
-          this.focusedIndex += 1;
-          if (this.shouldScroll)
-            this.scrollAmount -= this.getScrollAmountByOrientation(
-              this.$refs.childItem[this.focusedIndex],
-              this.orientation
-            );
+        if (this.isNextRowPresent()) {
+          this.updateRow();
+          if (this.shouldScroll) this.updateScrollValue("negative");
         }
       },
       preCondition: () => this.isFocused,
@@ -143,6 +160,7 @@ export default {
 <style lang="scss" scoped>
 .grid {
   display: flex;
+  flex-wrap: wrap;
 }
 .child {
   display: flex;
