@@ -13,12 +13,9 @@
     >
       <component
         :is="child"
-        :items="item.items"
-        :id="item.id || index"
-        :child="item.child"
+        v-bind="item"
+        :id="`child${item.id || index}`"
         :isFocused="isFocused && index === focusedIndex"
-        :orientation="item.orientation"
-        :shouldScroll="item.shouldScroll"
       />
     </div>
   </div>
@@ -42,9 +39,10 @@ export default {
       type: Boolean,
       default: false,
     },
-    orientation: {
-      type: String, //Direction of grid
-      default: "HORIZONTAL", //'VERTICAL'
+    disabled: {
+      //Condition to prevent navigation
+      type: Boolean,
+      default: false,
     },
     shouldScroll: {
       type: Boolean,
@@ -75,7 +73,7 @@ export default {
     },
   },
   methods: {
-    getScrollAmountByOrientation: (el, negative) => {
+    getScrollAmount: (el, negative) => {
       if (el) {
         let value = el.clientHeight;
         return negative ? -value : value;
@@ -120,11 +118,19 @@ export default {
       return this.focusedIndex > this.items.length - 1;
     },
     updateScrollValue(negative) {
-      this.scrollAmount += this.getScrollAmountByOrientation(
+      this.scrollAmount += this.getScrollAmount(
         this.$refs.childItem[this.focusedIndex],
         negative
       );
     },
+    handleFocusLost() {
+      if (this.focusedIndex > this.items.length - 1) {
+        this.focusedIndex = this.items.length - 1;
+      }
+    },
+  },
+  updated() {
+    this.handleFocusLost();
   },
   mounted() {
     enableNavigation({
@@ -151,7 +157,7 @@ export default {
           if (this.shouldScroll) this.updateScrollValue("negative");
         }
       },
-      preCondition: () => this.isFocused,
+      preCondition: () => this.isFocused && !this.disabled,
     });
   },
 };

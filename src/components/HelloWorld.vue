@@ -12,6 +12,7 @@
       :isFocused="false"
       :items="listItems"
       orientation="VERTICAL"
+      :shouldScroll="true"
       id="vertical"
     />
     <!-- <List :child="child" :isFocused="true" :items="items" 
@@ -40,7 +41,11 @@ export default {
       items: mockImage.map((item) => ({ items: item })),
       gridItems: [...new Array(23)].map(() => ({ items: mockImage[0] })),
       listItems: [
-        { child: Card, items: mockImage.map((item) => ({ items: item })) },
+        {
+          child: Card,
+          shouldScroll: true,
+          items: mockImage.map((item) => ({ items: item })),
+        },
         { child: Card, items: mockImage.map((item) => ({ items: item })) },
       ],
     };

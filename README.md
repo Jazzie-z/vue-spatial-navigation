@@ -1,4 +1,4 @@
-# focus-framework
+# vue-spatial-navigation
 
 ## Project setup
 

@@ -40,6 +40,11 @@ export default {
       type: Boolean,
       default: false,
     },
+    disabled: {
+      //Condition to prevent navigation
+      type: Boolean,
+      default: false,
+    },
     orientation: {
       type: String, //Direction of list
       default: "HORIZONTAL", //'VERTICAL'
@@ -73,9 +78,11 @@ export default {
       REVERSE: orientation === "VERTICAL" ? "UP" : "LEFT",
       FORWARD: orientation === "VERTICAL" ? "DOWN" : "RIGHT",
     }),
-    getScrollAmountByOrientation: (el, orientation) => {
+    getScrollAmountByOrientation: (el, orientation, negative) => {
       if (el) {
-        return el[orientation === "VERTICAL" ? "clientHeight" : "clientWidth"];
+        let value =
+          el[orientation === "VERTICAL" ? "clientHeight" : "clientWidth"];
+        return negative ? -value : value;
       }
       return 0;
     },
@@ -83,6 +90,23 @@ export default {
       if (this.focusedIndex > this.items.length - 1) {
         this.focusedIndex = this.items.length - 1;
       }
+    },
+    isPrevItemPresent() {
+      return this.focusedIndex > 0;
+    },
+    isNextItemPresent() {
+      return this.focusedIndex < this.items.length - 1;
+    },
+    updateFocus(reverse) {
+      let value = reverse ? -1 : 1;
+      this.focusedIndex += value;
+    },
+    updateScrollValue(negative) {
+      this.scrollAmount += this.getScrollAmountByOrientation(
+        this.$refs.childItem[0],
+        this.orientation,
+        negative
+      );
     },
   },
   updated() {
@@ -93,26 +117,18 @@ export default {
     enableNavigation({
       id: `list-${this.id}`,
       [KEYS.REVERSE]: () => {
-        if (this.focusedIndex > 0) {
-          this.focusedIndex -= 1;
-          if (this.shouldScroll)
-            this.scrollAmount += this.getScrollAmountByOrientation(
-              this.$refs.childItem[0],
-              this.orientation
-            );
+        if (this.isPrevItemPresent()) {
+          this.updateFocus("reverse");
+          if (this.shouldScroll) this.updateScrollValue();
         }
       },
       [KEYS.FORWARD]: () => {
-        if (this.focusedIndex < this.items.length - 1) {
-          this.focusedIndex += 1;
-          if (this.shouldScroll)
-            this.scrollAmount -= this.getScrollAmountByOrientation(
-              this.$refs.childItem[0],
-              this.orientation
-            );
+        if (this.isNextItemPresent()) {
+          this.updateFocus();
+          if (this.shouldScroll) this.updateScrollValue("negative");
         }
       },
-      preCondition: () => this.isFocused,
+      preCondition: () => this.isFocused && !this.disabled,
     });
   },
   destroyed() {
