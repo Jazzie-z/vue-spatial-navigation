@@ -17,7 +17,7 @@
         :id="`child${item.id || index}`"
         :isFocused="isFocused && index === focusedIndex"
         v-bind:class="{ disabled: disabledIndex.includes(index) }"
-        :disabled="disabledIndex.includes(index)"
+        :disabled="item.disabled || disabledIndex.includes(index)"
       />
     </div>
   </div>
@@ -98,8 +98,29 @@ export default {
       return 0;
     },
     handleFocusLost() {
-      if (this.focusedIndex > this.items.length - 1) {
-        this.focusedIndex = this.items.length - 1;
+      if (
+        this.focusedIndex > this.items.length - 1 ||
+        this.disabledIndex.includes(this.focusedIndex)
+      ) {
+        if (this.getValidPrevIndex() !== this.focusedIndex) {
+          this.$emit("onFocusLost", {
+            prevIndex: this.focusedIndex,
+            newIndex: this.getValidPrevIndex(),
+          });
+          this.focusedIndex = this.getValidPrevIndex();
+        } else if (this.getValidNextIndex() !== this.focusedIndex) {
+          this.$emit("onFocusLost", {
+            prevIndex: this.focusedIndex,
+            newIndex: this.getValidNextIndex(),
+          });
+          this.focusedIndex = this.getValidNextIndex();
+        } else {
+          this.focusedIndex = -1;
+          this.$emit("onFocusLost", {
+            err:
+              "No items to set focus, either disable it or provide new item to setFocus",
+          });
+        }
       }
     },
     isPrevItemPresent() {
@@ -114,7 +135,7 @@ export default {
       while (i < this.items.length) {
         if (!this.disabledIndex.includes(i)) {
           validIndex = i;
-          this.$emit("onFocus", {
+          this.$emit("onFocusChange", {
             prevIndex: this.focusedIndex,
             newIndex: validIndex,
             item: this.items[validIndex],
@@ -129,9 +150,9 @@ export default {
       let i = this.focusedIndex - 1;
       let validIndex = this.focusedIndex;
       while (i >= 0) {
-        if (!this.disabledIndex.includes(i)) {
+        if (!this.disabledIndex.includes(i) && i < this.items.length) {
           validIndex = i;
-          this.$emit("onFocus", {
+          this.$emit("onFocusChange", {
             prevIndex: this.focusedIndex,
             newIndex: validIndex,
             item: this.items[validIndex],

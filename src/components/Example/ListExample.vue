@@ -4,7 +4,7 @@
     :isFocused="true"
     :items="items"
     :shouldScroll="shouldScroll"
-    v-on:onFocus="onFocusHandler"
+    v-on:onFocusChange="onFocusHandler"
   />
 </template>
 

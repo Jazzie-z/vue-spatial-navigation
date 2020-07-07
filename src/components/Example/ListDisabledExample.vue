@@ -4,7 +4,7 @@
     :isFocused="true"
     :items="items"
     :shouldScroll="shouldScroll"
-    :disabledIndex="[1, 3]"
+    :disabledIndex="disabledIndex"
   />
 </template>
 
@@ -21,6 +21,7 @@ export default {
     return {
       items: ListData,
       Button: Button,
+      disabledIndex: [1, 3],
     };
   },
 };
