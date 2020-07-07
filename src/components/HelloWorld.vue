@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <SideNav/>
+    <SideNav />
     <Grid
       :child="child"
       v-if="false"
@@ -9,7 +9,7 @@
       :shouldScroll="true"
     />
     <List
-    v-if="false"
+      v-if="false"
       :child="childList"
       :isFocused="true"
       :items="listItems"
@@ -18,7 +18,7 @@
       id="vertical"
     />
     <div class="main-content">
-    <router-view></router-view>
+      <router-view></router-view>
     </div>
     <!-- <List :child="child" :isFocused="true" :items="items" 
 orientation="HORIZONTAL" id='vertical2'
@@ -40,7 +40,7 @@ export default {
   components: {
     List,
     Grid,
-    SideNav
+    SideNav,
   },
   data() {
     return {
@@ -61,19 +61,20 @@ export default {
   mounted() {
     setTimeout(() => {
       focusHandler.$emit("RESET_FOCUS", { force: true });
-    }, 3000);
+    }, 30000000);
   },
 };
 </script>
 <style lang="scss" scoped>
 .container {
-  background:black;
-  height:100vh;
+  background: black;
+  height: 100vh;
   overflow: hidden;
 }
-.main-content{
-    display:flex;
-    flex-direction: column;
-    padding: 100px;
+.main-content {
+  display: flex;
+  flex-direction: column;
+  padding: 100px;
+  overflow: hidden;
 }
 </style>

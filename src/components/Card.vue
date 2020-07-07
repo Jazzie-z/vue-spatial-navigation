@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  props: ["items", "isFocused"],
+  props: ["items", "isFocused", "disabled"],
 };
 </script>
 
@@ -16,5 +16,9 @@ img {
 }
 .focus {
   transform: scale(1.2);
+}
+.disabled {
+  opacity: 0.5;
+  filter: grayscale(1);
 }
 </style>

@@ -1,26 +1,26 @@
 <template>
   <List
-    :child="Card"
+    :child="Button"
     :isFocused="true"
     :items="items"
     :shouldScroll="shouldScroll"
-    :disabledIndex="[2]"
+    :disabledIndex="[1, 3]"
   />
 </template>
 
 <script>
 import List from "@/components/Focusable/List";
-import Card from "@/components/Card";
-import { mockImage } from "@/mock";
+import Button from "@/components/Button";
+import { ListData } from "./mock";
 export default {
+  props: ["shouldScroll"],
   components: {
     List,
   },
   data() {
     return {
-      items: mockImage.map((item) => ({ items: item })),
-      Card: Card,
-      shouldScroll: true,
+      items: ListData,
+      Button: Button,
     };
   },
 };

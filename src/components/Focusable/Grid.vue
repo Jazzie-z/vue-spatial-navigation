@@ -25,7 +25,7 @@
 import { enableNavigation, disableNavigation } from "@/focus/event";
 import { focusHandler } from "@/main";
 export default {
-  name:'focusable-grid',
+  name: "focusable-grid",
   props: {
     child: {
       type: Object, //Child component (eg: card, button)
