@@ -44,6 +44,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    defaultIndex: {
+      type: Number,
+      default: -1,
+    },
     disabled: {
       //Condition to prevent navigation
       type: Boolean,
@@ -82,10 +86,20 @@ export default {
     },
   },
   methods: {
+    isEnabledIndex(index) {
+      return !this.disabledIndex.includes(index);
+    },
     setInitialvalue() {
-      this.focusedIndex = this.getValidNextIndex();
-      if (this.shouldScroll && this.focusedIndex >= -1)
-        this.updateScrollValue();
+      if (
+        this.defaultIndex > -1 &&
+        this.defaultIndex < this.items.length &&
+        this.isEnabledIndex(this.defaultIndex)
+      ) {
+        this.focusedIndex = this.defaultIndex;
+      } else {
+        this.focusedIndex = this.getValidNextIndex();
+      }
+      if (this.focusedIndex >= -1) this.updateScrollValue();
     },
     getKeysByOrientation: (orientation) => ({
       REVERSE: orientation === "VERTICAL" ? "UP" : "LEFT",
@@ -133,7 +147,7 @@ export default {
       let i = this.focusedIndex + 1;
       let validIndex = this.focusedIndex;
       while (i < this.items.length) {
-        if (!this.disabledIndex.includes(i)) {
+        if (this.isEnabledIndex(i)) {
           validIndex = i;
           this.$emit("onFocusChange", {
             prevIndex: this.focusedIndex,
@@ -150,7 +164,7 @@ export default {
       let i = this.focusedIndex - 1;
       let validIndex = this.focusedIndex;
       while (i >= 0) {
-        if (!this.disabledIndex.includes(i) && i < this.items.length) {
+        if (this.isEnabledIndex(i) && i < this.items.length) {
           validIndex = i;
           this.$emit("onFocusChange", {
             prevIndex: this.focusedIndex,
@@ -171,16 +185,30 @@ export default {
       }
     },
     updateScrollValue() {
-      this.scrollAmount =
-        this.getScrollAmountByOrientation(
-          this.$refs.childItem[0],
-          this.orientation
-        ) * this.focusedIndex;
+      if (this.shouldScroll) {
+        this.scrollAmount =
+          this.getScrollAmountByOrientation(
+            this.$refs.childItem[0],
+            this.orientation
+          ) * this.focusedIndex;
+      }
     },
     resetFocus({ force }) {
       if (force || !this.isFocused) {
         this.focusedIndex = 0;
         this.scrollAmount = 0;
+      }
+    },
+    setExternalFocus({ index } = {}) {
+      if (
+        this.isEnabledIndex(index) &&
+        index >= 0 &&
+        index < this.items.length - 1
+      ) {
+        this.focusedIndex = index;
+        this.updateScrollValue();
+      } else {
+        console.error(`focus to the given index ${index} is not possible`);
       }
     },
   },
@@ -195,22 +223,24 @@ export default {
       [KEYS.REVERSE]: () => {
         if (this.isPrevItemPresent()) {
           this.updateFocus("reverse");
-          if (this.shouldScroll) this.updateScrollValue();
+          this.updateScrollValue();
         }
       },
       [KEYS.FORWARD]: () => {
         if (this.isNextItemPresent()) {
           this.updateFocus();
-          if (this.shouldScroll) this.updateScrollValue();
+          this.updateScrollValue();
         }
       },
       preCondition: () => this.isFocused && !this.disabled,
     });
     focusHandler.$on("RESET_FOCUS", this.resetFocus);
+    focusHandler.$on("SET_FOCUS", this.setExternalFocus);
   },
   destroyed() {
     disableNavigation(`list-${this.id}`);
     focusHandler.$off("RESET_FOCUS", this.resetFocus);
+    focusHandler.$off("SET_FOCUS", this.setExternalFocus);
   },
 };
 </script>
