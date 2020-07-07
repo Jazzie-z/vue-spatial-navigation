@@ -16,6 +16,8 @@
         v-bind="item"
         :id="`child${item.id || index}`"
         :isFocused="isFocused && index === focusedIndex"
+        v-bind:class="{ disabled:disabledIndex.includes(index)}"
+        :disabled="disabledIndex.includes(index)"
       />
     </div>
   </div>
@@ -47,6 +49,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    disabledIndex:{
+      type: Array,
+      default:()=>[-1]      
+    },
     orientation: {
       type: String, //Direction of list
       default: "HORIZONTAL", //'VERTICAL'
@@ -62,7 +68,7 @@ export default {
   },
   data() {
     return {
-      focusedIndex: 0,
+      focusedIndex: -1,
       scrollAmount: 0,
     };
   },
@@ -76,15 +82,17 @@ export default {
     },
   },
   methods: {
+    setInitialvalue(){
+      this.focusedIndex=this.getValidNextIndex()
+      if (this.shouldScroll && this.focusedIndex>=-1) this.updateScrollValue();
+    },
     getKeysByOrientation: (orientation) => ({
       REVERSE: orientation === "VERTICAL" ? "UP" : "LEFT",
       FORWARD: orientation === "VERTICAL" ? "DOWN" : "RIGHT",
     }),
-    getScrollAmountByOrientation: (el, orientation, negative) => {
+    getScrollAmountByOrientation: (el, orientation) => {
       if (el) {
-        let value =
-          el[orientation === "VERTICAL" ? "clientHeight" : "clientWidth"];
-        return negative ? -value : value;
+        return -el[orientation === "VERTICAL" ? "clientHeight" : "clientWidth"];
       }
       return 0;
     },
@@ -99,16 +107,42 @@ export default {
     isNextItemPresent() {
       return this.focusedIndex < this.items.length - 1;
     },
-    updateFocus(reverse) {
-      let value = reverse ? -1 : 1;
-      this.focusedIndex += value;
+    getValidNextIndex(){
+      let i = this.focusedIndex + 1;
+      let validIndex = this.focusedIndex
+      while(i < this.items.length){
+        if(!this.disabledIndex.includes(i)){
+          validIndex = i
+          break
+        }
+        i++
+      }
+      return validIndex
     },
-    updateScrollValue(negative) {
-      this.scrollAmount += this.getScrollAmountByOrientation(
+    getValidPrevIndex(){
+      let i = this.focusedIndex - 1;
+      let validIndex = this.focusedIndex
+      while(i >= 0){
+        if(!this.disabledIndex.includes(i)){
+          validIndex = i
+          break
+        }
+        i--
+      }
+      return validIndex
+    },
+    updateFocus(reverse) {
+      if(reverse){
+        this.focusedIndex=this.getValidPrevIndex()
+      }else{
+        this.focusedIndex=this.getValidNextIndex()
+      }
+    },
+    updateScrollValue() {      
+      this.scrollAmount = this.getScrollAmountByOrientation(
         this.$refs.childItem[0],
-        this.orientation,
-        negative
-      );
+        this.orientation
+      ) * this.focusedIndex;
     },
     resetFocus({ force }) {
       if (force || !this.isFocused) {
@@ -121,6 +155,7 @@ export default {
     this.handleFocusLost();
   },
   mounted() {
+    this.setInitialvalue()
     let KEYS = this.getKeysByOrientation(this.orientation);
     enableNavigation({
       id: `list-${this.id}`,
@@ -133,7 +168,7 @@ export default {
       [KEYS.FORWARD]: () => {
         if (this.isNextItemPresent()) {
           this.updateFocus();
-          if (this.shouldScroll) this.updateScrollValue("negative");
+          if (this.shouldScroll) this.updateScrollValue();
         }
       },
       preCondition: () => this.isFocused && !this.disabled,
@@ -156,5 +191,8 @@ export default {
 }
 .vertical {
   flex-direction: column;
+}
+.disabled {
+  background: grey;
 }
 </style>

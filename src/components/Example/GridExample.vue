@@ -4,7 +4,7 @@
       :isFocused="true"
       :items="items"
       :shouldScroll="true"
-      :maxColumn="5"
+      :maxColumn="4"
     />
 </template>
 
@@ -28,6 +28,6 @@ import { mockImage } from "@/mock";
 
 <style lang="scss" scoped>
 .grid{
-    width:1200px;
+    width:1000px;
 }
 </style>
