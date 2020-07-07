@@ -24,4 +24,7 @@ export default {
   color: #2c3e50;
   overflow: hidden;
 }
+body {
+  overflow: hidden;
+}
 </style>

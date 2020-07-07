@@ -11,7 +11,7 @@
 <script>
 import Grid from "@/components/Focusable/Grid";
 import Card from "@/components/Card";
-import { mockImage } from "@/mock";
+import { gridData } from "./mock";
 export default {
   props: ["shouldScroll"],
   components: {
@@ -19,7 +19,7 @@ export default {
   },
   data() {
     return {
-      items: [...new Array(23)].map(() => ({ items: mockImage[0] })),
+      items: gridData.map((item) => ({ items: item })),
       Card: Card,
     };
   },

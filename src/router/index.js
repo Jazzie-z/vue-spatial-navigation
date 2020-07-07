@@ -3,6 +3,7 @@ import Router from "vue-router";
 import ListExample from "@/components/Example/ListExample";
 import ListDisabledExample from "@/components/Example/ListDisabledExample";
 import CarouselExample from "@/components/Example/CarouselExample";
+import NestedCarouselExample from "@/components/Example/NestedCarouselExample";
 import GridExample from "@/components/Example/GridExample";
 Vue.use(Router);
 
@@ -21,6 +22,11 @@ export const routes = [
     path: "/carousel",
     displayName: "Carousel",
     component: CarouselExample,
+  },
+  {
+    path: "/nestedcarousel",
+    displayName: "Nested Carousel",
+    component: NestedCarouselExample,
   },
   {
     path: "/grid",

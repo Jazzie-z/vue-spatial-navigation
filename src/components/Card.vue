@@ -12,10 +12,15 @@ export default {
 
 <style lang="scss" scoped>
 img {
-  padding: 0 10px;
+  padding: 10px;
+  width: 200px;
+  border: 1px solid transparent;
 }
 .focus {
   transform: scale(1.2);
+  z-index: 2;
+  position: relative;
+  border: 1px solid white;
 }
 .disabled {
   opacity: 0.5;
