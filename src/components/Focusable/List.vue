@@ -119,20 +119,20 @@ export default {
         this.disabledIndex.includes(this.focusedIndex)
       ) {
         if (this.getValidPrevIndex() !== this.focusedIndex) {
-          this.$emit("onFocusLost", {
+          this.emitFocusLost({
             prevIndex: this.focusedIndex,
             newIndex: this.getValidPrevIndex(true),
           });
           this.focusedIndex = this.getValidPrevIndex();
         } else if (this.getValidNextIndex(true) !== this.focusedIndex) {
-          this.$emit("onFocusLost", {
+          this.emitFocusLost({
             prevIndex: this.focusedIndex,
             newIndex: this.getValidNextIndex(true),
           });
           this.focusedIndex = this.getValidNextIndex();
         } else {
           this.focusedIndex = -1;
-          this.$emit("onFocusLost", {
+          this.emitFocusLost({
             err:
               "No items to set focus, either disable it or provide new item to setFocus",
           });
@@ -145,18 +145,28 @@ export default {
     isNextItemPresent() {
       return this.focusedIndex < this.items.length - 1;
     },
+    emitFocusLost(payload) {
+      this.$parent.$emit("onFocusLost", payload);
+      this.$emit("onFocusLost", payload);
+    },
+    emitFocusChange(newIndex) {
+      let payload = {
+        prevIndex: this.focusedIndex,
+        newIndex,
+        item: this.items[newIndex],
+      };
+      this.$parent.$emit("onFocusChange", { ...payload, fromChild: true });
+      this.$emit("onFocusChange", payload);
+    },
     getValidNextIndex(initial) {
       let i = this.focusedIndex + 1;
       let validIndex = this.focusedIndex;
       while (i < this.items.length) {
         if (this.isEnabledIndex(i)) {
           validIndex = i;
-          if (!initial)
-            this.$emit("onFocusChange", {
-              prevIndex: this.focusedIndex,
-              newIndex: validIndex,
-              item: this.items[validIndex],
-            });
+          if (!initial) {
+            this.emitFocusChange(validIndex);
+          }
           break;
         }
         i++;
@@ -169,12 +179,7 @@ export default {
       while (i >= 0) {
         if (this.isEnabledIndex(i) && i < this.items.length) {
           validIndex = i;
-          if (!initial)
-            this.$emit("onFocusChange", {
-              prevIndex: this.focusedIndex,
-              newIndex: validIndex,
-              item: this.items[validIndex],
-            });
+          if (!initial) this.emitFocusChange(validIndex);
           break;
         }
         i--;

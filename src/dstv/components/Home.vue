@@ -8,6 +8,8 @@
       :shouldScroll="shouldScroll"
       orientation="VERTICAL"
       v-on:onFocusChange="onFocusChange"
+      v-on:onSelect="onSelect"
+      id="vertical-carousel"
     />
     <Loader class="loader" v-if="!items.length && !error" />
     <div class="error">{{ error }}</div>
@@ -42,8 +44,12 @@ export default {
         this.items = data
           .filter((item) => item.editorialListType === "Catchup")
           .map(({ editorialItems, name }) => ({
-            items: editorialItems.map(({ image }) => ({ src: image.LARGE })),
+            items: editorialItems.map(({ id, image }) => ({
+              id: id,
+              src: image.LARGE,
+            })),
             title: name,
+            id: name,
           }));
       }
       console.error(data);
@@ -67,8 +73,11 @@ export default {
         }
       }
     },
-    onFocusChange({ newIndex }) {
-      console.log("CALLED HERE IN FOCUS CHANGE", newIndex);
+    onFocusChange(item) {
+      console.log("CALLED HERE IN FOCUS CHANGE", item);
+    },
+    onSelect(item) {
+      console.log("CALLED HERE IN SELECT", item);
     },
   },
   created() {
@@ -93,6 +102,11 @@ export default {
     focusHandler.$on("FOCUS_CHANGE", this.keyListener);
     enableNavigation({
       UP: () => {
+        console.error(
+          "PREV INDEX",
+          this.$refs.verticalCarousel.prevIndex,
+          this.$refs.verticalCarousel.focusedIndex
+        );
         if (
           this.$refs.verticalCarousel &&
           this.$refs.verticalCarousel.prevIndex === 0
@@ -113,7 +127,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .focus {
   opacity: 1 !important;
   transform: translateY(-116px);

@@ -5,8 +5,10 @@
 </template>
 
 <script>
+import Selectable from "@/components/Focusable/Selectable";
 export default {
-  props: ["src", "isFocused", "disabled"],
+  extends: Selectable,
+  props: ["id", "src", "isFocused", "disabled"],
 };
 </script>
 

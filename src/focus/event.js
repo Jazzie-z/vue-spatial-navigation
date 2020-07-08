@@ -10,7 +10,7 @@ const KEY_CODE = {
 };
 export const enableNavigation = (actionCB) => {
   if (registered) {
-    const index = actions.findIndex((item) => item.id === actionCB.id);
+    const index = -1; //actions.findIndex((item) => item.id === actionCB.id);
     if (index > -1) {
       actions[index] = actionCB;
     } else {

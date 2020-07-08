@@ -5,21 +5,10 @@
 </template>
 
 <script>
-import { enableNavigation, disableNavigation } from "@/focus/event";
+import Selectable from "@/components/Focusable/Selectable";
 export default {
+  extends: Selectable,
   props: ["id", "displayName", "isFocused"],
-  mounted() {
-    enableNavigation({
-      SELECT: () => {
-        this.$emit("onSelect", this.$props);
-      },
-      preCondition: () => this.isFocused,
-      id: this.id,
-    });
-  },
-  destroyed() {
-    disableNavigation(this.id);
-  },
 };
 </script>
 
