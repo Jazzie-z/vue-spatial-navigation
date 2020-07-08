@@ -185,7 +185,7 @@ export default {
       }
     },
     updateScrollValue() {
-      if (this.shouldScroll) {
+      if (this.shouldScroll && this.$refs.childItem) {
         this.scrollAmount =
           this.getScrollAmountByOrientation(
             this.$refs.childItem[0],
@@ -199,16 +199,18 @@ export default {
         this.scrollAmount = 0;
       }
     },
-    setExternalFocus({ index } = {}) {
-      if (
-        this.isEnabledIndex(index) &&
-        index >= 0 &&
-        index < this.items.length - 1
-      ) {
-        this.focusedIndex = index;
-        this.updateScrollValue();
-      } else {
-        console.error(`focus to the given index ${index} is not possible`);
+    setExternalFocus({ index, id } = {}) {
+      if (id === this.id) {
+        if (
+          this.isEnabledIndex(index) &&
+          index >= 0 &&
+          index < this.items.length - 1
+        ) {
+          this.focusedIndex = index;
+          this.updateScrollValue();
+        } else {
+          console.error(`focus to the given index ${index} is not possible`);
+        }
       }
     },
   },
