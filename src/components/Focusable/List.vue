@@ -14,10 +14,11 @@
       <component
         :is="child"
         v-bind="item"
-        :id="`child${item.id || index}`"
+        :id="`child-${item.id || index}`"
         :isFocused="isFocused && index === focusedIndex"
         v-bind:class="{ disabled: disabledIndex.includes(index) }"
         :disabled="item.disabled || disabledIndex.includes(index)"
+        v-on="$listeners"
       />
     </div>
   </div>

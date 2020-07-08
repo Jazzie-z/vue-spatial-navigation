@@ -5,8 +5,21 @@
 </template>
 
 <script>
+import { enableNavigation, disableNavigation } from "@/focus/event";
 export default {
-  props: ["displayName", "isFocused"],
+  props: ["id", "displayName", "isFocused"],
+  mounted() {
+    enableNavigation({
+      SELECT: () => {
+        this.$emit("onSelect", this.$props);
+      },
+      preCondition: () => this.isFocused,
+      id: this.id,
+    });
+  },
+  destroyed() {
+    disableNavigation(this.id);
+  },
 };
 </script>
 

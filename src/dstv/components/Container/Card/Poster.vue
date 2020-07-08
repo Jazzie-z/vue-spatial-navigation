@@ -19,11 +19,13 @@ export default {
 img {
   padding: 10px;
   width: 200px;
+  filter: brightness(0.5);
 }
 .focus {
   transform: scale(1.2);
   z-index: 2;
   position: relative;
+  filter: brightness(1);
 }
 .disabled {
   opacity: 0.5;

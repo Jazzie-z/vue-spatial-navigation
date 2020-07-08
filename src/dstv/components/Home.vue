@@ -120,6 +120,7 @@ export default {
 }
 .home {
   background-image: url("../assets/img/leanback_bg.jpg");
+  background-repeat: no-repeat;
   opacity: 0.5;
   transition: transform 0.5s;
 }

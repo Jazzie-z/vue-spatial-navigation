@@ -6,6 +6,7 @@
       :items="items"
       :isFocused="isFocused"
       v-on:onFocusChange="onFocusChange"
+      v-on:onSelect="onSelect"
       id="menu"
     />
   </div>
@@ -33,6 +34,9 @@ export default {
       this.$router.push(item.id).catch((err) => {
         console.error(err);
       });
+    },
+    onSelect() {
+      focusHandler.$emit("FOCUS_CHANGE", { component: "MAIN_COMPONENT" });
     },
     keyListener({ component, accepted }) {
       if (component === "MAIN_COMPONENT" && accepted) {

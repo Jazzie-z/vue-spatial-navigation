@@ -9,7 +9,8 @@
     "build": "vue-cli-service build",
     "prettier": "prettier --write .",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "pretty": "npm run lint:fix && npm run prettier"
   },
   "dependencies": {
     "core-js": "^3.6.5",

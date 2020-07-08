@@ -6,6 +6,7 @@ const KEY_CODE = {
   38: "UP",
   39: "RIGHT",
   40: "DOWN",
+  13: "SELECT",
 };
 export const enableNavigation = (actionCB) => {
   if (registered) {
