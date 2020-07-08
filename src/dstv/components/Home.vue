@@ -1,11 +1,13 @@
 <template>
-  <div v-bind:class="{ animate: animate }">
+  <div class="home" v-bind:class="{ animate: animate, focus: isFocused }">
     <List
+      ref="verticalCarousel"
       :child="child"
-      :isFocused="true"
+      :isFocused="isFocused"
       :items="items"
       :shouldScroll="shouldScroll"
       orientation="VERTICAL"
+      v-on:onFocusChange="onFocusChange"
     />
     <Loader class="loader" v-if="!items.length && !error" />
     <div class="error">{{ error }}</div>
@@ -17,6 +19,8 @@ import List from "@/components/Focusable/List";
 import Carousel from "./Collection/Carousel";
 // import Poster from "./Container/Card/Poster";
 import Loader from "./Core/Loader/Loader";
+import { focusHandler } from "../../main";
+import { enableNavigation, disableNavigation } from "@/focus/event";
 export default {
   components: {
     List,
@@ -27,6 +31,7 @@ export default {
       items: [],
       child: Carousel,
       shouldScroll: true,
+      isFocused: false,
       animate: false,
       error: "",
     };
@@ -50,6 +55,21 @@ export default {
       let keys = ["200", "195", "81", "13"];
       if (keys.includes(ev.keyCode.toString())) this.toggleAnimation();
     },
+    keyListener({ component, accepted }) {
+      if (component === "MAIN_COMPONENT" && this.items.length) {
+        if (!accepted) {
+          focusHandler.$emit("FOCUS_CHANGE", {
+            component: "MAIN_COMPONENT",
+            accepted: true,
+          });
+        } else {
+          this.isFocused = true;
+        }
+      }
+    },
+    onFocusChange({ newIndex }) {
+      console.log("CALLED HERE IN FOCUS CHANGE", newIndex);
+    },
   },
   created() {
     fetch(
@@ -69,15 +89,39 @@ export default {
       });
     window.addEventListener("keydown", this.keyDownHandler);
   },
+  mounted() {
+    focusHandler.$on("FOCUS_CHANGE", this.keyListener);
+    enableNavigation({
+      UP: () => {
+        if (
+          this.$refs.verticalCarousel &&
+          this.$refs.verticalCarousel.prevIndex === 0
+        ) {
+          focusHandler.$emit("FOCUS_CHANGE", { component: "MENU" });
+          this.isFocused = false;
+        }
+      },
+      preCondition: () => this.isFocused,
+      id: "home",
+    });
+  },
   destroyed() {
+    focusHandler.$off("FOCUS_CHANGE", this.keyListener);
     window.addEventListener("keydown", this.keyDownHandler);
+    disableNavigation("home");
   },
 };
 </script>
 
 <style lang="scss">
 .focus {
-  z-index: 1;
+  opacity: 1 !important;
+  transform: translateY(-116px);
+}
+.home {
+  background-image: url("../assets/img/leanback_bg.jpg");
+  opacity: 0.5;
+  transition: transform 0.5s;
 }
 .animate {
   background: #1e3059;

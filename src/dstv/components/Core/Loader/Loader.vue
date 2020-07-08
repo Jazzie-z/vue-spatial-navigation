@@ -1,13 +1,22 @@
 <template>
-    <div class="lds-spinner">
-        <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
-    </div>
+  <div class="lds-spinner">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
 </template>
 
 <script>
-    export default {
-        
-    }
+export default {};
 </script>
 
 <style lang="scss" scoped>
@@ -89,5 +98,4 @@
     opacity: 0;
   }
 }
-
 </style>

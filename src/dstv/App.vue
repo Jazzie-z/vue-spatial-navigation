@@ -1,16 +1,20 @@
 <template>
   <div id="app">
-    <Home msg="Welcome to Your Vue.js App" />
+    <Menu />
+    <!-- <Home v-if="false"/> -->
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import Home from "./components/Home.vue";
+import Menu from "./components/Menu.vue";
+// import Home from "./components/Home.vue";
 
 export default {
   name: "App",
   components: {
-    Home,
+    // Home,
+    Menu,
   },
 };
 </script>
@@ -23,10 +27,10 @@ export default {
   text-align: center;
   color: #2c3e50;
   overflow: hidden;
-  
 }
 body {
   overflow: hidden;
-  background:black;
+  background: black;
+  margin: 0;
 }
 </style>

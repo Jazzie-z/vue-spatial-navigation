@@ -13,7 +13,7 @@ export default {
 <style lang="scss" scoped>
 .container {
   width: 220px;
-  height: 300px;  
+  height: 300px;
   box-sizing: border-box;
 }
 img {

@@ -46,7 +46,7 @@ export default {
     },
     defaultIndex: {
       type: Number,
-      default: -1,
+      default: 0,
     },
     disabled: {
       //Condition to prevent navigation
@@ -74,6 +74,7 @@ export default {
     return {
       focusedIndex: -1,
       scrollAmount: 0,
+      prevIndex: 0,
     };
   },
   computed: {
@@ -119,13 +120,13 @@ export default {
         if (this.getValidPrevIndex() !== this.focusedIndex) {
           this.$emit("onFocusLost", {
             prevIndex: this.focusedIndex,
-            newIndex: this.getValidPrevIndex(),
+            newIndex: this.getValidPrevIndex(true),
           });
           this.focusedIndex = this.getValidPrevIndex();
-        } else if (this.getValidNextIndex() !== this.focusedIndex) {
+        } else if (this.getValidNextIndex(true) !== this.focusedIndex) {
           this.$emit("onFocusLost", {
             prevIndex: this.focusedIndex,
-            newIndex: this.getValidNextIndex(),
+            newIndex: this.getValidNextIndex(true),
           });
           this.focusedIndex = this.getValidNextIndex();
         } else {
@@ -143,34 +144,36 @@ export default {
     isNextItemPresent() {
       return this.focusedIndex < this.items.length - 1;
     },
-    getValidNextIndex() {
+    getValidNextIndex(initial) {
       let i = this.focusedIndex + 1;
       let validIndex = this.focusedIndex;
       while (i < this.items.length) {
         if (this.isEnabledIndex(i)) {
           validIndex = i;
-          this.$emit("onFocusChange", {
-            prevIndex: this.focusedIndex,
-            newIndex: validIndex,
-            item: this.items[validIndex],
-          });
+          if (!initial)
+            this.$emit("onFocusChange", {
+              prevIndex: this.focusedIndex,
+              newIndex: validIndex,
+              item: this.items[validIndex],
+            });
           break;
         }
         i++;
       }
       return validIndex;
     },
-    getValidPrevIndex() {
+    getValidPrevIndex(initial = false) {
       let i = this.focusedIndex - 1;
       let validIndex = this.focusedIndex;
       while (i >= 0) {
         if (this.isEnabledIndex(i) && i < this.items.length) {
           validIndex = i;
-          this.$emit("onFocusChange", {
-            prevIndex: this.focusedIndex,
-            newIndex: validIndex,
-            item: this.items[validIndex],
-          });
+          if (!initial)
+            this.$emit("onFocusChange", {
+              prevIndex: this.focusedIndex,
+              newIndex: validIndex,
+              item: this.items[validIndex],
+            });
           break;
         }
         i--;
@@ -178,6 +181,7 @@ export default {
       return validIndex;
     },
     updateFocus(reverse) {
+      this.prevIndex = this.focusedIndex;
       if (reverse) {
         this.focusedIndex = this.getValidPrevIndex();
       } else {
@@ -226,12 +230,16 @@ export default {
         if (this.isPrevItemPresent()) {
           this.updateFocus("reverse");
           this.updateScrollValue();
+        } else {
+          this.prevIndex = this.focusedIndex;
         }
       },
       [KEYS.FORWARD]: () => {
         if (this.isNextItemPresent()) {
           this.updateFocus();
           this.updateScrollValue();
+        } else {
+          this.prevIndex = this.focusedIndex;
         }
       },
       preCondition: () => this.isFocused && !this.disabled,
