@@ -1,0 +1,5 @@
+export const COMPONENTS = {
+  MENU: "MENU",
+  MAIN_COMPONENT: "MAIN_COMPONENT",
+  EXIT: "EXIT",
+};

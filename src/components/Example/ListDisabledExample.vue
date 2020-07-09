@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import List from "@/components/Focusable/List";
+import List from "@/Focusable/List";
 import Button from "@/components/Button";
 import { ListData } from "./mock";
 export default {

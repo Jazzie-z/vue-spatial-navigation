@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import List from "@/components/Focusable/List";
+import List from "@/Focusable/List";
 import Poster from "../Container/Card/Poster";
 export default {
   props: ["isFocused", "items", "id", "title"],

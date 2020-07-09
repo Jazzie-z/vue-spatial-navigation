@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import Selectable from "@/components/Focusable/Selectable";
+import Selectable from "@/Focusable/Selectable";
 export default {
   extends: Selectable,
   props: ["id", "src", "isFocused", "disabled"],

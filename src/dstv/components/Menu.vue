@@ -14,10 +14,17 @@
 
 <script>
 import { ENV, HEADER } from "@/dstv/constants/environment";
-import List from "@/components/Focusable/List";
+import List from "@/Focusable/List";
 import MenuButton from "@/dstv/components/Core/MenuButton/MenuButton";
-import { focusHandler } from "../../main";
-import { enableNavigation, disableNavigation } from "@/focus/event";
+import {
+  enableNavigation,
+  disableNavigation,
+  dispatchFocus,
+  registerFocusDispatcher,
+  unRegisterFocusDispatcher,
+} from "@/Focusable/event";
+import { COMPONENTS } from "@/dstv/constants/focusEvent";
+import { mapActions } from "vuex";
 export default {
   components: {
     List,
@@ -30,20 +37,28 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["setError"]),
     onFocusChange({ item }) {
       this.$router.push(item.id).catch((err) => {
         console.error(err);
       });
     },
     onSelect() {
-      focusHandler.$emit("FOCUS_CHANGE", { component: "MAIN_COMPONENT" });
+      dispatchFocus({ component: COMPONENTS.MAIN_COMPONENT });
     },
     keyListener({ component, accepted }) {
-      if (component === "MAIN_COMPONENT" && accepted) {
-        this.isFocused = false;
-      }
-      if (component === "MENU") {
-        this.isFocused = true;
+      switch (component) {
+        case COMPONENTS.MAIN_COMPONENT:
+          if (accepted) this.isFocused = false;
+          break;
+        case COMPONENTS.MENU:
+          this.isFocused = true;
+          break;
+        case COMPONENTS.EXIT:
+          alert("SHOULD EXIT NOW");
+          break;
+        default:
+          break;
       }
     },
     menuTransform(data) {
@@ -84,10 +99,17 @@ export default {
       .then((data) => this.menuTransform(data));
   },
   mounted() {
-    focusHandler.$on("FOCUS_CHANGE", this.keyListener);
+    registerFocusDispatcher(this.keyListener);
     enableNavigation({
       DOWN: () => {
-        focusHandler.$emit("FOCUS_CHANGE", { component: "MAIN_COMPONENT" });
+        dispatchFocus({ component: COMPONENTS.MAIN_COMPONENT });
+      },
+      BACK: () => {
+        this.setError({
+          onRetry: () => dispatchFocus({ component: COMPONENTS.EXIT }),
+          onBack: () => dispatchFocus({ component: COMPONENTS.MENU }),
+        });
+        this.isFocused = false;
       },
       preCondition: () => this.isFocused,
       id: "menu",
@@ -95,7 +117,7 @@ export default {
   },
   destroyed() {
     disableNavigation("menu");
-    focusHandler.$off("FOCUS_CHANGE", this.keyListener);
+    unRegisterFocusDispatcher(this.keyListener);
   },
 };
 </script>

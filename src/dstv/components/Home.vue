@@ -4,25 +4,31 @@
       ref="verticalCarousel"
       :child="child"
       :isFocused="isFocused"
-      :items="items"
+      :items="homeData"
       :shouldScroll="shouldScroll"
       orientation="VERTICAL"
       v-on:onFocusChange="onFocusChange"
       v-on:onSelect="onSelect"
       id="vertical-carousel"
     />
-    <Loader class="loader" v-if="!items.length && !error" />
+    <Loader class="loader" v-if="homeLoading && !error" />
     <div class="error">{{ error }}</div>
   </div>
 </template>
 
 <script>
-import List from "@/components/Focusable/List";
+import List from "@/Focusable/List";
 import Carousel from "./Collection/Carousel";
-// import Poster from "./Container/Card/Poster";
 import Loader from "./Core/Loader/Loader";
-import { focusHandler } from "../../main";
-import { enableNavigation, disableNavigation } from "@/focus/event";
+import {
+  enableNavigation,
+  disableNavigation,
+  dispatchFocus,
+  registerFocusDispatcher,
+  unRegisterFocusDispatcher,
+} from "@/Focusable/event";
+import { COMPONENTS } from "@/dstv/constants/focusEvent";
+import { mapGetters, mapActions } from "vuex";
 export default {
   components: {
     List,
@@ -38,22 +44,11 @@ export default {
       error: "",
     };
   },
+  computed: {
+    ...mapGetters(["homeData", "homeLoading"]),
+  },
   methods: {
-    prepareHomeData(data) {
-      if (data) {
-        this.items = data
-          .filter((item) => item.editorialListType === "Catchup")
-          .map(({ editorialItems, name }) => ({
-            items: editorialItems.map(({ id, image }) => ({
-              id: id,
-              src: image.LARGE,
-            })),
-            title: name,
-            id: name,
-          }));
-      }
-      console.error(data);
-    },
+    ...mapActions(["getHomeData"]),
     toggleAnimation() {
       this.animate = !this.animate;
     },
@@ -62,10 +57,10 @@ export default {
       if (keys.includes(ev.keyCode.toString())) this.toggleAnimation();
     },
     keyListener({ component, accepted }) {
-      if (component === "MAIN_COMPONENT" && this.items.length) {
+      if (component === COMPONENTS.MAIN_COMPONENT && this.homeData.length) {
         if (!accepted) {
-          focusHandler.$emit("FOCUS_CHANGE", {
-            component: "MAIN_COMPONENT",
+          dispatchFocus({
+            component: COMPONENTS.MAIN_COMPONENT,
             accepted: true,
           });
         } else {
@@ -81,46 +76,31 @@ export default {
     },
   },
   created() {
-    fetch(
-      "https://now.dstv.com/api/cs-mobile/editorial/v6/getEditorialsForHome;productId=1b09957b-27aa-493b-a7c9-53b3cec92d63;platformId=32faad53-5e7b-4cc0-9f33-000092e85950;packageId=3e6e5480-8b8a-4fd5-9721-470c895f91e2",
-      {
-        headers: {
-          authorization: "aa56fa8a-fd0e-4b9b-b26e-b8acb8d40e30",
-        },
-      }
-    )
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        if (data.items) this.prepareHomeData(data.items);
-        else this.error = data;
-      });
+    this.getHomeData();
     window.addEventListener("keydown", this.keyDownHandler);
   },
   mounted() {
-    focusHandler.$on("FOCUS_CHANGE", this.keyListener);
+    registerFocusDispatcher(this.keyListener);
     enableNavigation({
       UP: () => {
-        console.error(
-          "PREV INDEX",
-          this.$refs.verticalCarousel.prevIndex,
-          this.$refs.verticalCarousel.focusedIndex
-        );
         if (
           this.$refs.verticalCarousel &&
           this.$refs.verticalCarousel.prevIndex === 0
         ) {
-          focusHandler.$emit("FOCUS_CHANGE", { component: "MENU" });
+          dispatchFocus({ component: COMPONENTS.MENU });
           this.isFocused = false;
         }
+      },
+      BACK: () => {
+        dispatchFocus({ component: COMPONENTS.MENU });
+        this.isFocused = false;
       },
       preCondition: () => this.isFocused,
       id: "home",
     });
   },
   destroyed() {
-    focusHandler.$off("FOCUS_CHANGE", this.keyListener);
+    unRegisterFocusDispatcher(this.keyListener);
     window.addEventListener("keydown", this.keyDownHandler);
     disableNavigation("home");
   },

@@ -1,20 +1,23 @@
 <template>
   <div id="app">
     <Menu />
-    <!-- <Home v-if="false"/> -->
+    <Error v-if="error" />
     <router-view></router-view>
   </div>
 </template>
 
 <script>
 import Menu from "./components/Menu.vue";
-// import Home from "./components/Home.vue";
-
+import Error from "./components/Error.vue";
+import { mapGetters } from "vuex";
 export default {
   name: "App",
   components: {
-    // Home,
+    Error,
     Menu,
+  },
+  computed: {
+    ...mapGetters(["error"]),
   },
 };
 </script>
