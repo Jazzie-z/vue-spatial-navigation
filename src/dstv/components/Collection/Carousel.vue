@@ -21,7 +21,7 @@ export default {
   },
   data() {
     return {
-      child: Poster,
+      child: [Poster],
     };
   },
 };

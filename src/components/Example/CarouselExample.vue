@@ -19,7 +19,7 @@ export default {
   data() {
     return {
       items: mockImage.map((item) => ({ items: item })),
-      Card: Card,
+      Card: [Card],
       shouldScroll: true,
     };
   },

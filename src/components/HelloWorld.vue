@@ -45,7 +45,7 @@ export default {
   data() {
     return {
       child: Card,
-      childList: List,
+      childList: [List],
       items: mockImage.map((item) => ({ items: item })),
       gridItems: [...new Array(23)].map(() => ({ items: mockImage[0] })),
       listItems: [

@@ -31,7 +31,7 @@ export default {
   data() {
     return {
       items: [],
-      child: Carousel,
+      child: [Carousel],
       shouldScroll: true,
       isFocused: false,
       animate: false,

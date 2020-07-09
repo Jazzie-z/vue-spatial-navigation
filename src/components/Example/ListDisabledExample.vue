@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       items: ListData,
-      Button: Button,
+      Button: [Button],
       disabledIndex: [1, 3],
     };
   },

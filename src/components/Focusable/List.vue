@@ -12,7 +12,7 @@
       :key="index"
     >
       <component
-        :is="child"
+        :is="child[index] || child[0]"
         v-bind="item"
         :id="`child-${item.id || index}`"
         :isFocused="isFocused && index === focusedIndex"
@@ -32,7 +32,7 @@ export default {
   name: "focusable-list",
   props: {
     child: {
-      type: Object, //Child component (eg: card, button)
+      type: Array, //Array of Child components (eg: card, button)
       required: true,
     },
     items: {

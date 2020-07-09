@@ -25,7 +25,7 @@ export default {
   data() {
     return {
       items: [],
-      child: MenuButton,
+      child: [MenuButton],
       isFocused: true,
     };
   },
