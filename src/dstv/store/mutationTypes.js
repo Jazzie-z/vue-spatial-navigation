@@ -1,0 +1,6 @@
+export const TYPES = {
+  HOME: "HOME",
+  HOME_SUCCESS: "HOME_SUCCESS",
+  ERROR: "ERROR",
+  ERROR_CLEAR: "ERROR_CLEAR",
+};

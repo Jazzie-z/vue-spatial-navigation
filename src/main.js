@@ -1,21 +1,21 @@
 import Vue from "vue";
 import App from "./App.vue";
-import DstvApp from "./dstv/App.vue";
+import DstvApp from "@/dstv/App.vue";
 import router from "./router";
-import DstvRouter from "./dstv/router";
-export const focusHandler = new Vue();
+import DstvRouter from "@/dstv/router";
+import { store } from "@/dstv/store/store";
 Vue.config.productionTip = false;
 
 const DSTV = true;
 
 let AppModule = App;
-let routerModule = router;
+let props = { router };
 if (DSTV) {
   AppModule = DstvApp;
-  routerModule = DstvRouter;
+  props = { router: DstvRouter, store };
 }
 
 new Vue({
-  router: routerModule,
+  ...props,
   render: (h) => h(AppModule),
 }).$mount("#app");
