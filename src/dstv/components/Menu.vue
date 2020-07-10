@@ -35,8 +35,25 @@ export default {
     };
   },
   computed: mapState({
-    menuData: (state) => state.menu.data,
+    menuData: (state) => state.menu.data || [],
+    menuError: (state) => state.menu.error,
+    anyError: (state) => state.error,
   }),
+  watch: {
+    menuError(newValue) {
+      if (newValue)
+        this.setError({
+          onRetry: () => this.getMenuData(),
+          onBack: () => {
+            alert("should exit");
+          },
+          exit: true,
+        });
+    },
+    anyError(newValue) {
+      if (newValue && this.isFocused) this.isFocused = false;
+    },
+  },
   methods: {
     ...mapActions(["getMenuData", "setError"]),
     onFocusChange({ item }) {
@@ -74,8 +91,9 @@ export default {
       },
       BACK: () => {
         this.setError({
-          onRetry: () => dispatchFocus({ component: COMPONENTS.EXIT }),
+          onRetry: () => console.error("SHOULD EXIT NOW"),
           onBack: () => dispatchFocus({ component: COMPONENTS.MENU }),
+          type: "EXIT",
         });
         this.isFocused = false;
       },

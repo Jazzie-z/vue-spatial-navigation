@@ -11,10 +11,10 @@
         v-on:onFocusChange="onFocusChange"
         v-on:onSelect="onSelect"
         id="vertical-carousel"
+        :scrollLimit="data.length - 1"
       />
     </div>
     <Loader class="loader" v-if="loading" />
-    <div class="error">{{ error }}</div>
   </div>
 </template>
 
@@ -42,21 +42,33 @@ export default {
       shouldScroll: true,
       isFocused: false,
       animate: false,
-      error: "",
+      // error: "",
     };
   },
   computed: mapState({
-    data: (state) => state.home.data,
+    data: (state) => state.home.data || [],
     loading: (state) => state.menu.loading || state.home.loading,
-    menuData: (state) => state.menu.data,
+    error: (state) => state.home.error,
+    isMenuLoaded: (state) => state.menu.data && state.menu.data.length,
   }),
   watch: {
-    menuData(newValue, oldValue) {
-      if (newValue.length && !oldValue.length) this.getHomeData();
+    isMenuLoaded(newValue, oldValue) {
+      if (newValue && !oldValue) this.getHomeData();
+    },
+    error(newValue) {
+      if (newValue) {
+        this.setError({
+          onRetry: () => {
+            this.getHomeData();
+            this.setFocusToMenu();
+          },
+          onBack: () => this.setFocusToMenu(),
+        });
+      }
     },
   },
   methods: {
-    ...mapActions(["getHomeData"]),
+    ...mapActions(["getHomeData", "setError"]),
     toggleAnimation() {
       this.animate = !this.animate;
     },
@@ -65,6 +77,8 @@ export default {
       if (keys.includes(ev.keyCode.toString())) this.toggleAnimation();
     },
     keyListener({ component, accepted }) {
+      console.error("CALLED", this.isFocused);
+
       if (component === COMPONENTS.MAIN_COMPONENT && this.data.length) {
         if (!accepted) {
           dispatchFocus({
@@ -76,7 +90,7 @@ export default {
         }
       }
     },
-    onFocusChange({ prevIndex, newIndex }) {
+    checkAndStopVerticalScroll({ prevIndex, newIndex }) {
       if (newIndex > prevIndex) {
         if (newIndex > this.data.length - 3 && this.shouldScroll) {
           this.shouldScroll = false;
@@ -91,29 +105,34 @@ export default {
         }
       }
     },
+    onFocusChange({ prevIndex, newIndex }) {
+      this.checkAndStopVerticalScroll({ prevIndex, newIndex });
+    },
     onSelect(item) {
       console.log("CALLED HERE IN SELECT", item);
+    },
+    setFocusToMenu() {
+      dispatchFocus({ component: COMPONENTS.MENU });
+      this.isFocused = false;
+    },
+    isFirstCarouselFocused() {
+      return (
+        this.$refs.verticalCarousel &&
+        this.$refs.verticalCarousel.prevIndex === 0
+      );
     },
   },
   created() {
     window.addEventListener("keydown", this.keyDownHandler);
   },
   mounted() {
+    if (this.isMenuLoaded && !this.data.length) this.getHomeData();
     registerFocusDispatcher(this.keyListener);
     enableNavigation({
       UP: () => {
-        if (
-          this.$refs.verticalCarousel &&
-          this.$refs.verticalCarousel.prevIndex === 0
-        ) {
-          dispatchFocus({ component: COMPONENTS.MENU });
-          this.isFocused = false;
-        }
+        if (this.isFirstCarouselFocused()) this.setFocusToMenu();
       },
-      BACK: () => {
-        dispatchFocus({ component: COMPONENTS.MENU });
-        this.isFocused = false;
-      },
+      BACK: () => this.setFocusToMenu(),
       preCondition: () => this.isFocused,
       id: "home",
     });
@@ -157,9 +176,5 @@ export default {
   top: 50%;
   left: 50%;
   transform: scale(1.1);
-}
-.error {
-  color: red;
-  font-size: 32px;
 }
 </style>

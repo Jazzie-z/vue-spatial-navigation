@@ -7,6 +7,7 @@
       :items="items"
       :shouldScroll="true"
       :id="id"
+      :scrollLimit="items.length - 5"
     />
   </div>
 </template>

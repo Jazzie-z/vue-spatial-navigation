@@ -18,10 +18,10 @@ const state = {
 
 const getters = {
   error: (state) => state.error,
-  homeData: (state) => state.home.data,
+  homeData: (state) => state.home.data || [],
   homeLoading: (state) => state.home.loading,
   menu: (state) => state.menu,
-  menuData: (state) => state.menu.data,
+  menuData: (state) => state.menu.data || [],
 };
 
 export const store = new Vuex.Store({

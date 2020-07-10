@@ -9,6 +9,7 @@ export default {
         .then((res) => res.json())
         .then((data) => {
           if (data.length) commit(TYPES.MENU_SUCCESS, menuSuccess(data));
+          else commit(TYPES.MENU_ERROR, data);
         });
     }
   },

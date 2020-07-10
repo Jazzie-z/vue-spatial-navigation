@@ -1,9 +1,9 @@
 <template>
   <div class="error" v-if="error">
-    <div class="title">Are you sure you want to exit?</div>
+    <div class="title">{{ error.title }}</div>
     <List
       :child="child"
-      :items="items"
+      :items="error.buttons"
       :isFocused="true"
       id="error"
       v-on:onSelect="onSelect"
@@ -24,10 +24,6 @@ export default {
     return {
       child: [ErrorButton],
       isFocused: true,
-      items: [
-        { displayName: "Yes", action: true },
-        { displayName: "No", action: false },
-      ],
     };
   },
   computed: mapState({ error: (state) => state.error }),
@@ -37,6 +33,13 @@ export default {
       if (action) {
         this.retryError();
       } else {
+        this.onBackHandler();
+      }
+    },
+    onBackHandler() {
+      if (this.error.exit) {
+        console.error("SHOULD EXIT APP");
+      } else {
         this.clearError();
       }
     },
@@ -44,7 +47,7 @@ export default {
   mounted() {
     enableNavigation({
       BACK: () => {
-        this.clearError();
+        this.onBackHandler();
       },
       preCondition: () => this.isFocused,
       id: "error",
