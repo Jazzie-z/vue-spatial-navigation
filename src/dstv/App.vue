@@ -9,16 +9,14 @@
 <script>
 import Menu from "./components/Menu.vue";
 import Error from "./components/Error.vue";
-import { mapGetters } from "vuex";
+import { mapState } from "vuex";
 export default {
   name: "App",
   components: {
     Error,
     Menu,
   },
-  computed: {
-    ...mapGetters(["error"]),
-  },
+  computed: mapState({ error: (state) => state.error }),
 };
 </script>
 

@@ -1,9 +1,9 @@
 <template>
   <div class="menu" v-bind:class="{ hide: !isFocused }">
     <List
-      v-if="items.length"
+      v-if="menuData.length"
       :child="child"
-      :items="items"
+      :items="menuData"
       :isFocused="isFocused"
       v-on:onFocusChange="onFocusChange"
       v-on:onSelect="onSelect"
@@ -13,7 +13,6 @@
 </template>
 
 <script>
-import { ENV, HEADER } from "@/dstv/constants/environment";
 import List from "@/Focusable/List";
 import MenuButton from "@/dstv/components/Core/MenuButton/MenuButton";
 import {
@@ -24,20 +23,22 @@ import {
   unRegisterFocusDispatcher,
 } from "@/Focusable/event";
 import { COMPONENTS } from "@/dstv/constants/focusEvent";
-import { mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 export default {
   components: {
     List,
   },
   data() {
     return {
-      items: [],
       child: [MenuButton],
       isFocused: true,
     };
   },
+  computed: mapState({
+    menuData: (state) => state.menu.data,
+  }),
   methods: {
-    ...mapActions(["setError"]),
+    ...mapActions(["getMenuData", "setError"]),
     onFocusChange({ item }) {
       this.$router.push(item.id).catch((err) => {
         console.error(err);
@@ -61,42 +62,9 @@ export default {
           break;
       }
     },
-    menuTransform(data) {
-      if (data && data.length) {
-        let menuData = {
-          home: "Home",
-          livetv: "Live TV",
-          catchup: "Catch Up",
-          mylist: "My List",
-          search: "Search",
-          settings: "Settings",
-        };
-        let menuOrder = [
-          "home",
-          "livetv",
-          "catchup",
-          "mylist",
-          "search",
-          "settings",
-        ];
-        let result = [];
-        data.forEach((item) => {
-          if (menuOrder.includes(item.id) && item.visible)
-            result.push({ id: item.id, displayName: menuData[item.id] });
-        });
-        result.splice(
-          result.findIndex((item) => item.id === "settings"),
-          0,
-          { id: "search", visible: true, displayName: menuData.search }
-        );
-        this.items = result;
-      }
-    },
   },
   created() {
-    fetch(ENV.MENU, HEADER())
-      .then((res) => res.json())
-      .then((data) => this.menuTransform(data));
+    this.getMenuData();
   },
   mounted() {
     registerFocusDispatcher(this.keyListener);

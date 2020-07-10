@@ -1,17 +1,19 @@
 <template>
   <div class="home" v-bind:class="{ animate: animate, focus: isFocused }">
-    <List
-      ref="verticalCarousel"
-      :child="child"
-      :isFocused="isFocused"
-      :items="homeData"
-      :shouldScroll="shouldScroll"
-      orientation="VERTICAL"
-      v-on:onFocusChange="onFocusChange"
-      v-on:onSelect="onSelect"
-      id="vertical-carousel"
-    />
-    <Loader class="loader" v-if="homeLoading && !error" />
+    <div class="carousel-wrapper">
+      <List
+        ref="verticalCarousel"
+        :child="child"
+        :isFocused="isFocused"
+        :items="data"
+        :shouldScroll="shouldScroll"
+        orientation="VERTICAL"
+        v-on:onFocusChange="onFocusChange"
+        v-on:onSelect="onSelect"
+        id="vertical-carousel"
+      />
+    </div>
+    <Loader class="loader" v-if="loading" />
     <div class="error">{{ error }}</div>
   </div>
 </template>
@@ -28,7 +30,7 @@ import {
   unRegisterFocusDispatcher,
 } from "@/Focusable/event";
 import { COMPONENTS } from "@/dstv/constants/focusEvent";
-import { mapGetters, mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 export default {
   components: {
     List,
@@ -36,7 +38,6 @@ export default {
   },
   data() {
     return {
-      items: [],
       child: [Carousel],
       shouldScroll: true,
       isFocused: false,
@@ -44,8 +45,15 @@ export default {
       error: "",
     };
   },
-  computed: {
-    ...mapGetters(["homeData", "homeLoading"]),
+  computed: mapState({
+    data: (state) => state.home.data,
+    loading: (state) => state.menu.loading || state.home.loading,
+    menuData: (state) => state.menu.data,
+  }),
+  watch: {
+    menuData(newValue, oldValue) {
+      if (newValue.length && !oldValue.length) this.getHomeData();
+    },
   },
   methods: {
     ...mapActions(["getHomeData"]),
@@ -57,7 +65,7 @@ export default {
       if (keys.includes(ev.keyCode.toString())) this.toggleAnimation();
     },
     keyListener({ component, accepted }) {
-      if (component === COMPONENTS.MAIN_COMPONENT && this.homeData.length) {
+      if (component === COMPONENTS.MAIN_COMPONENT && this.data.length) {
         if (!accepted) {
           dispatchFocus({
             component: COMPONENTS.MAIN_COMPONENT,
@@ -68,15 +76,26 @@ export default {
         }
       }
     },
-    onFocusChange(item) {
-      console.log("CALLED HERE IN FOCUS CHANGE", item);
+    onFocusChange({ prevIndex, newIndex }) {
+      if (newIndex > prevIndex) {
+        if (newIndex > this.data.length - 3 && this.shouldScroll) {
+          this.shouldScroll = false;
+        } else if (!this.shouldScroll) {
+          this.shouldScroll = true;
+        }
+      } else {
+        if (newIndex > this.data.length - 2 && this.shouldScroll) {
+          this.shouldScroll = false;
+        } else if (!this.shouldScroll) {
+          this.shouldScroll = true;
+        }
+      }
     },
     onSelect(item) {
       console.log("CALLED HERE IN SELECT", item);
     },
   },
   created() {
-    this.getHomeData();
     window.addEventListener("keydown", this.keyDownHandler);
   },
   mounted() {
@@ -113,10 +132,19 @@ export default {
   transform: translateY(-116px);
 }
 .home {
+  display: flex;
+  flex-direction: column;
   background-image: url("../assets/img/leanback_bg.jpg");
   background-repeat: no-repeat;
+  background-size: cover;
   opacity: 0.5;
   transition: transform 0.5s;
+  height: 100vh;
+}
+.carousel-wrapper {
+  margin-top: 72px;
+  padding-left: 128px;
+  overflow: hidden;
 }
 .animate {
   background: #1e3059;

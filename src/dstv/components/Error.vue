@@ -14,7 +14,7 @@
 <script>
 import List from "@/Focusable/List";
 import ErrorButton from "@/dstv/components/Core/ErrorButton/ErrorButton";
-import { mapGetters, mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 import { enableNavigation, disableNavigation } from "@/Focusable/event";
 export default {
   components: {
@@ -30,9 +30,7 @@ export default {
       ],
     };
   },
-  computed: {
-    ...mapGetters(["error"]),
-  },
+  computed: mapState({ error: (state) => state.error }),
   methods: {
     ...mapActions(["clearError", "retryError"]),
     onSelect({ action }) {

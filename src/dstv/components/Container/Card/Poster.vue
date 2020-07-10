@@ -14,13 +14,12 @@ export default {
 
 <style lang="scss" scoped>
 .container {
-  width: 220px;
-  height: 300px;
+  width: 173px;
+  height: 218px;
   box-sizing: border-box;
 }
 img {
-  padding: 10px;
-  width: 200px;
+  width: 157px;
   filter: brightness(0.5);
 }
 .focus {
