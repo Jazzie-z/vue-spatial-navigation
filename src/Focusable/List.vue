@@ -112,7 +112,8 @@ export default {
     }),
     getScrollAmountByOrientation: (el, orientation) => {
       if (el) {
-        return -el[orientation === "VERTICAL" ? "clientHeight" : "clientWidth"];
+        let value = el.getBoundingClientRect();
+        return -value[orientation === "VERTICAL" ? "height" : "width"];
       }
       return 0;
     },
@@ -201,7 +202,7 @@ export default {
       if (this.shouldScroll && this.$refs.childItem) {
         this.scrollAmount =
           this.getScrollAmountByOrientation(
-            this.$refs.childItem[0],
+            this.$refs.childItem[this.focusedIndex],
             this.orientation
           ) * this.focusedIndex;
       }
