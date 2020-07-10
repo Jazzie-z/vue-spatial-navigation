@@ -69,6 +69,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    scrollLimit: {
+      type: Number,
+      default: Infinity,
+    },
     id: {
       //unique id to differentiate navigation
       default: Math.random().toString(),
@@ -198,8 +202,11 @@ export default {
         this.focusedIndex = this.getValidNextIndex();
       }
     },
+    canScroll() {
+      return this.shouldScroll && this.focusedIndex < this.scrollLimit;
+    },
     updateScrollValue() {
-      if (this.shouldScroll && this.$refs.childItem) {
+      if (this.canScroll() && this.$refs.childItem) {
         this.scrollAmount =
           this.getScrollAmountByOrientation(
             this.$refs.childItem[this.focusedIndex],
