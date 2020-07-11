@@ -9,6 +9,7 @@ export const transformHomeData = (data) => {
         })),
         title: name,
         id: name,
+        renderType: "poster",
       }));
   }
   return data;

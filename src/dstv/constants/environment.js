@@ -10,4 +10,5 @@ export const VERSION = "v6";
 export const ENV = {
   MENU: `${BASE_API}/${VERSION}/application/navigationmenu;`,
   HOME: `${BASE_API}/editorial/${VERSION}/getEditorialsForHome;productId=1b09957b-27aa-493b-a7c9-53b3cec92d63;platformId=32faad53-5e7b-4cc0-9f33-000092e85950;packageId=3e6e5480-8b8a-4fd5-9721-470c895f91e2`,
+  LIVE_SECTION: `${BASE_API}/epg/${VERSION}/sections;platformId=7869f714-c674-4386-8a05-8e37b619bb68`,
 };

@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import Menu from "./components/Menu.vue";
-import Error from "./components/Error.vue";
+import Menu from "./components/Page/Menu.vue";
+import Error from "./components/Page/Error.vue";
 import { mapState } from "vuex";
 export default {
   name: "App",
@@ -23,10 +23,8 @@ export default {
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: white;
   overflow: hidden;
 }
 body {

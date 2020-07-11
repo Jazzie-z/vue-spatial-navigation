@@ -1,8 +1,7 @@
 <template>
   <div class="menu" v-bind:class="{ hide: !isFocused }">
-    <List
+    <Nav
       v-if="menuData.length"
-      :child="child"
       :items="menuData"
       :isFocused="isFocused"
       v-on:onFocusChange="onFocusChange"
@@ -13,8 +12,7 @@
 </template>
 
 <script>
-import List from "@/Focusable/List";
-import MenuButton from "@/dstv/components/Core/MenuButton/MenuButton";
+import Nav from "@/dstv/components/Collection/Nav";
 import {
   enableNavigation,
   disableNavigation,
@@ -26,11 +24,10 @@ import { COMPONENTS } from "@/dstv/constants/focusEvent";
 import { mapState, mapActions } from "vuex";
 export default {
   components: {
-    List,
+    Nav,
   },
   data() {
     return {
-      child: [MenuButton],
       isFocused: true,
     };
   },
@@ -57,7 +54,8 @@ export default {
   methods: {
     ...mapActions(["getMenuData", "setError"]),
     onFocusChange({ item }) {
-      this.$router.push(item.id).catch((err) => {
+      console.error("focus changed called");
+      this.$router.push(`/${item.id}`).catch((err) => {
         console.error(err);
       });
     },
@@ -88,6 +86,7 @@ export default {
     enableNavigation({
       DOWN: () => {
         dispatchFocus({ component: COMPONENTS.MAIN_COMPONENT });
+        return true;
       },
       BACK: () => {
         this.setError({
@@ -109,20 +108,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.list {
-  background: #000000;
-  height: 116px;
-  position: relative;
-  text-align: center;
-  z-index: 5;
-  -ms-flex-align: center;
-  align-items: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  transition: transform 0.5s;
-}
 .menu {
   transition: transform 0.5s;
+  z-index: 5;
+  position: relative;
 }
 .hide {
   transform: translateY(-116px);

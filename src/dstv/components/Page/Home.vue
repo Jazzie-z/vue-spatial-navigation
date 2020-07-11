@@ -14,14 +14,14 @@
         :scrollLimit="data.length - 1"
       />
     </div>
-    <Loader class="loader" v-if="loading" />
+    <Loader v-if="loading" />
   </div>
 </template>
 
 <script>
 import List from "@/Focusable/List";
-import Carousel from "./Collection/Carousel";
-import Loader from "./Core/Loader/Loader";
+import Carousel from "@/dstv/components/Collection/Carousel";
+import Loader from "@/dstv/components/Core/Loader/Loader";
 import {
   enableNavigation,
   disableNavigation,
@@ -77,8 +77,6 @@ export default {
       if (keys.includes(ev.keyCode.toString())) this.toggleAnimation();
     },
     keyListener({ component, accepted }) {
-      console.error("CALLED", this.isFocused);
-
       if (component === COMPONENTS.MAIN_COMPONENT && this.data.length) {
         if (!accepted) {
           dispatchFocus({
@@ -153,7 +151,7 @@ export default {
 .home {
   display: flex;
   flex-direction: column;
-  background-image: url("../assets/img/leanback_bg.jpg");
+  background-image: url("../../assets/img/leanback_bg.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   opacity: 0.5;
@@ -170,11 +168,5 @@ export default {
   * {
     transition-duration: 0.5s;
   }
-}
-.loader {
-  position: absolute !important;
-  top: 50%;
-  left: 50%;
-  transform: scale(1.1);
 }
 </style>

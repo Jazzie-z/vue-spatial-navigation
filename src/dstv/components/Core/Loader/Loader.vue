@@ -1,17 +1,19 @@
 <template>
-  <div class="lds-spinner">
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
+  <div class="loader">
+    <div class="lds-spinner">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
   </div>
 </template>
 
@@ -20,10 +22,16 @@ export default {};
 </script>
 
 <style lang="scss" scoped>
+.loader {
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  top: 50%;
+  transform: scale(1.1);
+}
 .lds-spinner {
   color: official;
   display: inline-block;
-  position: relative;
   width: 80px;
   height: 80px;
 }

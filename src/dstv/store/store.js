@@ -14,6 +14,8 @@ const state = {
     data: [],
     error: null,
   },
+  section: {},
+  channel: {},
 };
 
 const getters = {
