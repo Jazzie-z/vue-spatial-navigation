@@ -205,17 +205,24 @@ export default {
     canScroll() {
       return this.shouldScroll && this.focusedIndex < this.scrollLimit;
     },
+    getScrollValueByFocus() {
+      let newValue = 0;
+      this.items.forEach((item, index) => {
+        if (index < this.focusedIndex)
+          newValue += this.getScrollAmountByOrientation(
+            this.$refs.childItem[index],
+            this.orientation
+          );
+      });
+      return newValue;
+    },
     updateScrollValue() {
       if (this.canScroll() && this.$refs.childItem) {
-        this.scrollAmount =
-          this.getScrollAmountByOrientation(
-            this.$refs.childItem[this.focusedIndex],
-            this.orientation
-          ) * this.focusedIndex;
+        this.scrollAmount = this.getScrollValueByFocus();
       }
     },
-    resetFocus({ force }) {
-      if (force || !this.isFocused) {
+    resetFocus({ force, id } = {}) {
+      if (force || (!this.isFocused && id === this.id)) {
         this.focusedIndex = 0;
         this.scrollAmount = 0;
       }

@@ -25,7 +25,7 @@ export const enableNavigation = (actionCB) => {
     registered = true;
     actions.push(actionCB);
     window.addEventListener("keydown", (event) => {
-      actions.forEach((action) => {
+      actions.some((action) => {
         if (!action.preCondition || action.preCondition())
           return (
             action[KEY_CODE[event.keyCode]] && action[KEY_CODE[event.keyCode]]()
