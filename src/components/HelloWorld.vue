@@ -26,12 +26,12 @@ orientation="HORIZONTAL" id='vertical2'
   </div>
 </template>
 <script>
-import List from "@/components/Focusable/List";
-import Grid from "@/components/Focusable/Grid";
+import List from "@/Focusable/List";
+import Grid from "@/Focusable/Grid";
 import Card from "./Card";
 import SideNav from "@/components/SideNav";
 import { mockImage } from "@/mock";
-import { focusHandler } from "../main";
+import { focusHandler } from "@/Focusable/event";
 export default {
   name: "HelloWorld",
   props: {
@@ -45,7 +45,7 @@ export default {
   data() {
     return {
       child: Card,
-      childList: List,
+      childList: [List],
       items: mockImage.map((item) => ({ items: item })),
       gridItems: [...new Array(23)].map(() => ({ items: mockImage[0] })),
       listItems: [

@@ -12,26 +12,30 @@
       :key="index"
     >
       <component
-        :is="child"
+        :is="child[index] || child[0]"
         v-bind="item"
-        :id="`child${item.id || index}`"
+        :id="`child-${item.id || index}`"
         :isFocused="isFocused && index === focusedIndex"
         v-bind:class="{ disabled: disabledIndex.includes(index) }"
         :disabled="item.disabled || disabledIndex.includes(index)"
+        v-on="$listeners"
       />
     </div>
   </div>
 </template>
 
 <script>
-import { enableNavigation, disableNavigation } from "@/focus/event";
-import { focusHandler } from "@/main";
+import {
+  enableNavigation,
+  disableNavigation,
+  focusHandler,
+} from "@/Focusable/event";
 
 export default {
   name: "focusable-list",
   props: {
     child: {
-      type: Object, //Child component (eg: card, button)
+      type: Array, //Array of Child components (eg: card, button)
       required: true,
     },
     items: {
@@ -46,7 +50,7 @@ export default {
     },
     defaultIndex: {
       type: Number,
-      default: -1,
+      default: 0,
     },
     disabled: {
       //Condition to prevent navigation
@@ -65,6 +69,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    scrollLimit: {
+      type: Number,
+      default: Infinity,
+    },
     id: {
       //unique id to differentiate navigation
       default: Math.random().toString(),
@@ -74,6 +82,7 @@ export default {
     return {
       focusedIndex: -1,
       scrollAmount: 0,
+      prevIndex: 0,
     };
   },
   computed: {
@@ -107,7 +116,8 @@ export default {
     }),
     getScrollAmountByOrientation: (el, orientation) => {
       if (el) {
-        return -el[orientation === "VERTICAL" ? "clientHeight" : "clientWidth"];
+        let value = el.getBoundingClientRect();
+        return -value[orientation === "VERTICAL" ? "height" : "width"];
       }
       return 0;
     },
@@ -117,20 +127,20 @@ export default {
         this.disabledIndex.includes(this.focusedIndex)
       ) {
         if (this.getValidPrevIndex() !== this.focusedIndex) {
-          this.$emit("onFocusLost", {
+          this.emitFocusLost({
             prevIndex: this.focusedIndex,
-            newIndex: this.getValidPrevIndex(),
+            newIndex: this.getValidPrevIndex(true),
           });
           this.focusedIndex = this.getValidPrevIndex();
-        } else if (this.getValidNextIndex() !== this.focusedIndex) {
-          this.$emit("onFocusLost", {
+        } else if (this.getValidNextIndex(true) !== this.focusedIndex) {
+          this.emitFocusLost({
             prevIndex: this.focusedIndex,
-            newIndex: this.getValidNextIndex(),
+            newIndex: this.getValidNextIndex(true),
           });
           this.focusedIndex = this.getValidNextIndex();
         } else {
           this.focusedIndex = -1;
-          this.$emit("onFocusLost", {
+          this.emitFocusLost({
             err:
               "No items to set focus, either disable it or provide new item to setFocus",
           });
@@ -143,34 +153,41 @@ export default {
     isNextItemPresent() {
       return this.focusedIndex < this.items.length - 1;
     },
-    getValidNextIndex() {
+    emitFocusLost(payload) {
+      this.$parent.$emit("onFocusLost", payload);
+      this.$emit("onFocusLost", payload);
+    },
+    emitFocusChange(newIndex) {
+      let payload = {
+        prevIndex: this.focusedIndex,
+        newIndex,
+        item: this.items[newIndex],
+      };
+      this.$parent.$emit("onFocusChange", { ...payload, fromChild: true });
+      this.$emit("onFocusChange", payload);
+    },
+    getValidNextIndex(initial) {
       let i = this.focusedIndex + 1;
       let validIndex = this.focusedIndex;
       while (i < this.items.length) {
         if (this.isEnabledIndex(i)) {
           validIndex = i;
-          this.$emit("onFocusChange", {
-            prevIndex: this.focusedIndex,
-            newIndex: validIndex,
-            item: this.items[validIndex],
-          });
+          if (!initial) {
+            this.emitFocusChange(validIndex);
+          }
           break;
         }
         i++;
       }
       return validIndex;
     },
-    getValidPrevIndex() {
+    getValidPrevIndex(initial = false) {
       let i = this.focusedIndex - 1;
       let validIndex = this.focusedIndex;
       while (i >= 0) {
         if (this.isEnabledIndex(i) && i < this.items.length) {
           validIndex = i;
-          this.$emit("onFocusChange", {
-            prevIndex: this.focusedIndex,
-            newIndex: validIndex,
-            item: this.items[validIndex],
-          });
+          if (!initial) this.emitFocusChange(validIndex);
           break;
         }
         i--;
@@ -178,23 +195,34 @@ export default {
       return validIndex;
     },
     updateFocus(reverse) {
+      this.prevIndex = this.focusedIndex;
       if (reverse) {
         this.focusedIndex = this.getValidPrevIndex();
       } else {
         this.focusedIndex = this.getValidNextIndex();
       }
     },
-    updateScrollValue() {
-      if (this.shouldScroll && this.$refs.childItem) {
-        this.scrollAmount =
-          this.getScrollAmountByOrientation(
-            this.$refs.childItem[0],
+    canScroll() {
+      return this.shouldScroll && this.focusedIndex < this.scrollLimit;
+    },
+    getScrollValueByFocus() {
+      let newValue = 0;
+      this.items.forEach((item, index) => {
+        if (index < this.focusedIndex)
+          newValue += this.getScrollAmountByOrientation(
+            this.$refs.childItem[index],
             this.orientation
-          ) * this.focusedIndex;
+          );
+      });
+      return newValue;
+    },
+    updateScrollValue() {
+      if (this.canScroll() && this.$refs.childItem) {
+        this.scrollAmount = this.getScrollValueByFocus();
       }
     },
-    resetFocus({ force }) {
-      if (force || !this.isFocused) {
+    resetFocus({ force, id } = {}) {
+      if (force || (!this.isFocused && id === this.id)) {
         this.focusedIndex = 0;
         this.scrollAmount = 0;
       }
@@ -226,12 +254,16 @@ export default {
         if (this.isPrevItemPresent()) {
           this.updateFocus("reverse");
           this.updateScrollValue();
+        } else {
+          this.prevIndex = this.focusedIndex;
         }
       },
       [KEYS.FORWARD]: () => {
         if (this.isNextItemPresent()) {
           this.updateFocus();
           this.updateScrollValue();
+        } else {
+          this.prevIndex = this.focusedIndex;
         }
       },
       preCondition: () => this.isFocused && !this.disabled,

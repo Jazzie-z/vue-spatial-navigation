@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import List from "@/components/Focusable/List";
+import List from "@/Focusable/List";
 import Card from "@/components/Card";
 import { mockImage } from "@/mock";
 export default {
@@ -19,7 +19,7 @@ export default {
   data() {
     return {
       items: mockImage.map((item) => ({ items: item })),
-      Card: Card,
+      Card: [Card],
       shouldScroll: true,
     };
   },

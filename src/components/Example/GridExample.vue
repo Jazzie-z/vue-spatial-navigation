@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import Grid from "@/components/Focusable/Grid";
+import Grid from "@/Focusable/Grid";
 import Card from "@/components/Card";
 import { gridData } from "./mock";
 export default {

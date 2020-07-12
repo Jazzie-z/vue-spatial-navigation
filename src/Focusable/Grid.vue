@@ -22,8 +22,11 @@
 </template>
 
 <script>
-import { enableNavigation, disableNavigation } from "@/focus/event";
-import { focusHandler } from "@/main";
+import {
+  enableNavigation,
+  disableNavigation,
+  focusHandler,
+} from "@/Focusable/event";
 export default {
   name: "focusable-grid",
   props: {

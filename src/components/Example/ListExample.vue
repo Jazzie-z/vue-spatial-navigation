@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import List from "@/components/Focusable/List";
+import List from "@/Focusable/List";
 import Button from "@/components/Button";
 import { ListData } from "./mock";
 export default {
@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       items: ListData,
-      Button: Button,
+      Button: [Button],
     };
   },
   methods: {
