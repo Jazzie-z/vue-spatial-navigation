@@ -58,6 +58,7 @@ export default {
     noContent: (state) =>
       (!state.channel.data || !state.channel.data.length) &&
       !state.channel.error &&
+      !state.section.loading &&
       !state.channel.loading,
   }),
   
