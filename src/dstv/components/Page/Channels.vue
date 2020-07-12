@@ -101,7 +101,7 @@ export default {
     fetchChannelData() {
       let initialSection = this.section.data[0];
       this.title = initialSection.displayName;
-      this.getChannelData(initialSection.endpoint);
+      this.getChannelData(initialSection.endPoint);
     },
     useChannelData() {
       let index = this.channelData.findIndex(
@@ -109,7 +109,7 @@ export default {
       );
       focusHandler.$emit("RESET_FOCUS", { id: "child-channel-carousel" });
       let payload = {
-        items: this.data.slice(0, 14),
+        items: this.data,
         shouldScroll: true,
         scrollLimit: this.data.length - 3,
         renderType: "SmartCarousel",
@@ -152,9 +152,9 @@ export default {
       this.focusedIndex = 0;
     },
     onFocusChange({ item, newIndex, id }) {
-      if (item.endpoint) {
+      if (item.endPoint) {
         this.title = item.displayName;
-        this.getChannelData(item.endpoint);
+        this.getChannelData(item.endPoint);
       }
       if (id === "section" || (id === "vertical-list" && newIndex === 0)) {
         this.hideSection = false;

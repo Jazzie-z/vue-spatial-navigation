@@ -1,11 +1,15 @@
 import { TYPES } from "../mutationTypes";
 import { ENV, HEADER } from "@/dstv/constants/environment";
 import { transformSectionData } from "@/dstv/transformation/section.transform";
+const URL = {
+  livetv: ENV.LIVE_SECTION,
+  catchup: ENV.CATCHUP_SECTION,
+};
 export default {
   getSectionData({ commit, state }, type) {
     if (!state.section[type]) {
       commit(TYPES.SECTION);
-      fetch(ENV.LIVE_SECTION, HEADER())
+      fetch(URL[type], HEADER())
         .then((res) => res.json())
         .then((data) => {
           if (data.items)

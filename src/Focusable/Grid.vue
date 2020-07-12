@@ -12,10 +12,11 @@
       :key="index"
     >
       <component
-        :is="child"
+        :is="child[index] || child[0]"
         v-bind="item"
-        :id="`child${item.id || index}`"
+        :id="`${item.id || index}`"
         :isFocused="isFocused && index === focusedIndex"
+        v-on="$listeners"
       />
     </div>
   </div>
@@ -31,7 +32,7 @@ export default {
   name: "focusable-grid",
   props: {
     child: {
-      type: Object, //Child component (eg: card, button)
+      type: Array, //Child component (eg: card, button)
       required: true,
     },
     items: {
@@ -107,6 +108,7 @@ export default {
       let value = reverse ? -1 : 1;
       this.focusedIndex += value;
       this.activeColumn += value;
+      this.emitFocusChange();
     },
     updateRow(reverse) {
       let cardsPerColumn = reverse ? -this.maxColumn : this.maxColumn;
@@ -118,6 +120,17 @@ export default {
         this.focusedIndex = this.items.length - 1;
         this.activeColumn = (this.items.length - 1) % this.maxColumn;
       }
+      this.emitFocusChange();
+    },
+    emitFocusChange() {
+      let payload = {
+        row: this.activeRow,
+        column: this.activeColumn,
+        newIndex: this.focusedIndex,
+        item: this.items[this.focusedIndex],
+        id: this.id,
+      };
+      this.$emit("onFocusChange", payload);
     },
     isFocusIndexOutOfBound() {
       return this.focusedIndex > this.items.length - 1;

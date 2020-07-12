@@ -15,6 +15,7 @@ export default {
   padding: 40px;
   background: white;
   font-size: 32px;
+  color: black;
 }
 .focus {
   background: #ff005e;

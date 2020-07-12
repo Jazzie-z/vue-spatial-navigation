@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       items: gridData.map((item) => ({ items: item })),
-      Card: Card,
+      Card: [Card],
     };
   },
 };

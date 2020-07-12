@@ -1,4 +1,5 @@
 import List from "@/Focusable/List";
+import Grid from "@/Focusable/Grid";
 /*Custom components*/
 //Collection
 import Carousel from "@/dstv/components/Collection/Carousel";
@@ -13,17 +14,19 @@ import Loader from "@/dstv/components/Core/Loader/Loader";
 import Background from "@/dstv/components/Core/Background/Background";
 import NoContent from "@/dstv/components/Core/NoContent/NoContent";
 import ErrorButton from "@/dstv/components/Core/ErrorButton/ErrorButton";
-
+import FilterButton from "@/dstv/components/Core/FilterButton/FilterButton";
 export const COMPONENTS = {
-  CardPoster,
-  Card16x9,
+  List,
+  Grid,
   Carousel,
   Nav,
+  SmartCarousel,
+  CardPoster,
+  Card16x9,
   MenuButton,
-  List,
   Loader,
   Background,
   NoContent,
-  SmartCarousel,
   ErrorButton,
+  FilterButton,
 };

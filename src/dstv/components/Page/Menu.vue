@@ -19,11 +19,13 @@ import {
   enableNavigation,
   disableNavigation,
   dispatchFocus,
+  focusHandler,
   registerFocusDispatcher,
   unRegisterFocusDispatcher,
 } from "@/Focusable/event";
 import { COMPONENTS } from "@/dstv/constants/focusEvent";
 import { mapState, mapActions } from "vuex";
+
 export default {
   components: {
     Dynamic,
@@ -99,12 +101,16 @@ export default {
         return true;
       },
       BACK: () => {
-        this.setError({
-          onRetry: () => console.error("SHOULD EXIT NOW"),
-          onBack: () => dispatchFocus({ component: COMPONENTS.MENU }),
-          type: "EXIT",
-        });
-        this.isFocused = false;
+        if (this.$route.path.split("/").pop() === "home") {
+          this.setError({
+            onRetry: () => console.error("SHOULD EXIT NOW"),
+            onBack: () => dispatchFocus({ component: COMPONENTS.MENU }),
+            type: "EXIT",
+          });
+          this.isFocused = false;
+        } else {
+          focusHandler.$emit("SET_FOCUS", { id: "menu", index: 0 });
+        }
       },
       preCondition: () => this.isFocused,
       id: "menu",

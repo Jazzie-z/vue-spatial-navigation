@@ -4,6 +4,7 @@ export const transformSectionData = (data) => {
       ...item,
       displayName: item.name,
       path: index ? item.name.toLowerCase().replace(" ", "") : "",
+      endPoint: item.endPoint || item.endpoint,
       renderType: "MenuButton",
     }));
   }

@@ -16,6 +16,7 @@ const state = {
   },
   section: {},
   channel: {},
+  catchup: {},
 };
 
 const getters = {

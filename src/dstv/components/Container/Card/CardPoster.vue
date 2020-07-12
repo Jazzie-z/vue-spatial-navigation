@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container poster">
     <img :src="src" v-bind:class="{ focus: isFocused }" />
   </div>
 </template>
@@ -9,7 +9,7 @@ import Selectable from "@/Focusable/Selectable";
 export default {
   extends: Selectable,
   inheritAttrs: false,
-  props: ["id", "src", "isFocused", "disabled"],
+  props: ["src", "isFocused", "disabled"],
 };
 </script>
 

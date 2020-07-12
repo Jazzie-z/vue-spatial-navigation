@@ -236,6 +236,7 @@ export default {
           index >= 0 &&
           index < this.items.length - 1
         ) {
+          this.emitFocusChange(index);
           this.focusedIndex = index;
           this.updateScrollValue();
         } else {
