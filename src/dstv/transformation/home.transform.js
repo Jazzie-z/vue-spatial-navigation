@@ -11,7 +11,7 @@ export const transformHomeData = (data) => {
         title: name,
         id: name,
         renderType: "Carousel",
-        maxVisibility:7
+        maxVisibility: 7,
       }));
   }
   return data;

@@ -18,5 +18,5 @@ export const menuSuccess = (data) => {
     0,
     { id: "search", visible: true, displayName: menuData.search }
   );
-  return result.map(item => ({ ...item, renderType: 'MenuButton' }));
+  return result.map((item) => ({ ...item, renderType: "MenuButton" }));
 };

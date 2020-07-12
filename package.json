@@ -19,6 +19,7 @@
     "sass-loader": "^9.0.1",
     "serve-static": "^1.14.1",
     "vue": "^2.6.11",
+    "vue-fragment": "^1.5.1",
     "vue-router": "^3.3.4",
     "vuex": "^3.5.1"
   },

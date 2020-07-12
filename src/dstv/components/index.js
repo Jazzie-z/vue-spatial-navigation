@@ -19,5 +19,5 @@ export const COMPONENTS = {
   Loader,
   Background,
   NoContent,
-  SmartCarousel
+  SmartCarousel,
 };

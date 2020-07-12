@@ -8,9 +8,8 @@ export default {
       .then((res) => res.json())
       .then((data) => {
         if (data.items)
-            commit(TYPES.CHANNEL_SUCCESS, transformChannelData(data.items));
-        else
-        commit(TYPES.CHANNEL_ERROR, data);
+          commit(TYPES.CHANNEL_SUCCESS, transformChannelData(data.items));
+        else commit(TYPES.CHANNEL_ERROR, data);
       });
   },
 };

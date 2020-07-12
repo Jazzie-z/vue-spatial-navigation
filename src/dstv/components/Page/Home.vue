@@ -1,26 +1,28 @@
 <template>
-  <div class="home" v-bind:class="{ focus: isFocused }">
-    <div class="carousel-wrapper">
-      <Dynamic
-        ref="verticalCarousel"
-        :child="child"
-        :isFocused="isFocused"
-        :items="data"
-        :shouldScroll="true"
-        orientation="VERTICAL"
-        id="vertical-carousel"
-        renderType="SmartCarousel"
-        :maxVisibility=3
-        :scrollLimit="data.length - 1"
-        v-on:onFocusChange="onFocusChange"
-      />
+  <fragment>
+    <div class="home" v-bind:class="{ focus: isFocused }">
+      <div class="carousel-wrapper">
+        <Dynamic
+          ref="verticalCarousel"
+          :child="child"
+          :isFocused="isFocused"
+          :items="data"
+          :shouldScroll="true"
+          orientation="VERTICAL"
+          id="vertical-carousel"
+          renderType="SmartCarousel"
+          :maxVisibility="3"
+          :scrollLimit="data.length - 1"
+          v-on:onFocusChange="onFocusChange"
+        />
+      </div>
     </div>
-    <Dynamic v-if="loading" renderType="Loader"/>
-  </div>
+    <Dynamic v-if="loading" renderType="Loader" />
+  </fragment>
 </template>
 
 <script>
-import Dynamic from "@/dstv/components/Dynamic"
+import Dynamic from "@/dstv/components/Dynamic";
 import {
   enableNavigation,
   disableNavigation,
@@ -32,7 +34,7 @@ import { COMPONENTS } from "@/dstv/constants/focusEvent";
 import { mapState, mapActions } from "vuex";
 export default {
   components: {
-    Dynamic
+    Dynamic,
   },
   data() {
     return {
@@ -64,8 +66,8 @@ export default {
   },
   methods: {
     ...mapActions(["getHomeData", "setError"]),
-    onFocusChange(item){
-      console.error('focus changed',item)
+    onFocusChange(item) {
+      console.error("focus changed", item);
     },
     keyListener({ component, accepted }) {
       if (component === COMPONENTS.MAIN_COMPONENT && this.data.length) {
@@ -98,7 +100,7 @@ export default {
     registerFocusDispatcher(this.keyListener);
     enableNavigation({
       UP: () => {
-        console.error(this.$refs.verticalCarousel.$children[0].endReached)
+        console.error(this.$refs.verticalCarousel.$children[0].endReached);
         if (this.isFirstCarouselFocused()) this.setFocusToMenu();
       },
       BACK: () => this.setFocusToMenu(),

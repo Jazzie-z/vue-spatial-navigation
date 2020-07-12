@@ -6,6 +6,7 @@
 
 <script>
 export default {
+  inheritAttrs: false,
   props: {
     title: {
       type: String,

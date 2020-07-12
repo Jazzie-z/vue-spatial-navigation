@@ -1,5 +1,5 @@
 <template>
-    <div
+  <div
     class="smart-carousel"
     v-bind:class="{ focus: isFocused, vertical: orientation === 'VERTICAL' }"
     v-bind:style="style"
@@ -18,7 +18,7 @@
         v-on="$listeners"
       />
     </div>
-    </div>
+  </div>
 </template>
 
 <script>
@@ -29,8 +29,8 @@ import {
 } from "@/Focusable/event";
 export default {
   inheritAttrs: false,
-  components:{
-    Dynamic: ()=>import("@/dstv/components/Dynamic")
+  components: {
+    Dynamic: () => import("@/dstv/components/Dynamic"),
   },
   props: {
     items: {
@@ -61,34 +61,35 @@ export default {
     },
     maxVisibility: {
       type: Number,
-      default: 6
+      default: 6,
     },
     minVisibility: {
       type: Number,
-      default: 5
-    }
+      default: 5,
+    },
   },
   data() {
-    return {      
+    return {
       focusedIndex: this.defaultIndex,
-      prevIndex:0,
-      endReached: this.defaultIndex ===0 && this.defaultIndex===this.items.length-1,
-      scrollAmount:0,
+      prevIndex: 0,
+      endReached:
+        this.defaultIndex === 0 && this.defaultIndex === this.items.length - 1,
+      scrollAmount: 0,
       startIndex: 0,
-      endIndex: this.maxVisibility+1,
+      endIndex: this.maxVisibility + 1,
     };
   },
-  computed:{
+  computed: {
     style() {
       return {
         transform: `translate${this.orientation === "VERTICAL" ? "Y" : "X"}(${
           this.scrollAmount
         }px)`,
       };
-  },
-  visibleItems(){
-    return this.items.slice(this.startIndex,this.endIndex)
-  }
+    },
+    visibleItems() {
+      return this.items.slice(this.startIndex, this.endIndex);
+    },
   },
   methods: {
     getKeysByOrientation: (orientation) => ({
@@ -110,62 +111,63 @@ export default {
     },
     getValidNextIndex() {
       let validIndex = this.focusedIndex + 1;
-      if(this.visibleItems[validIndex]) return validIndex
-      this.endReached=true
+      if (this.visibleItems[validIndex]) return validIndex;
+      this.endReached = true;
       return this.focusedIndex;
     },
     getValidPrevIndex() {
       let validIndex = this.focusedIndex - 1;
-      if(this.visibleItems[validIndex]) return validIndex
-      this.endReached=true
+      if (this.visibleItems[validIndex]) return validIndex;
+      this.endReached = true;
       return this.focusedIndex;
     },
     updateFocus(reverse) {
-      this.prevIndex = this.focusedIndex;      
-      this.endReached=false
-      if (reverse) {        
-        this.focusedIndex = this.getValidPrevIndex();                
-      } else {                
-        this.focusedIndex = this.getValidNextIndex();        
+      this.prevIndex = this.focusedIndex;
+      this.endReached = false;
+      if (reverse) {
+        this.focusedIndex = this.getValidPrevIndex();
+      } else {
+        this.focusedIndex = this.getValidNextIndex();
       }
     },
     updateScrollValue(reverse) {
       if (this.$refs.childItem) {
-        this.scrollAmount = reverse?0:this.getScrollAmountByOrientation(
-            this.$refs.childItem[0],
-            this.orientation
-          );          
+        this.scrollAmount = reverse
+          ? 0
+          : this.getScrollAmountByOrientation(
+              this.$refs.childItem[0],
+              this.orientation
+            );
       }
     },
-    paginateData(reverse){
+    paginateData(reverse) {
       this.prevIndex = this.focusedIndex;
-      let value = reverse?-1:1
-        this.startIndex+=value
-        this.endIndex+=value
+      let value = reverse ? -1 : 1;
+      this.startIndex += value;
+      this.endIndex += value;
     },
-
   },
   mounted() {
     let KEYS = this.getKeysByOrientation(this.orientation);
     enableNavigation({
       id: `smart-carousel-${this.id}`,
       [KEYS.REVERSE]: () => {
-        if(this.focusedIndex > 1){
-            this.updateFocus("reverse");
-        }else if(this.startIndex>0){
-          this.paginateData('reverse')
-        }else{
+        if (this.focusedIndex > 1) {
+          this.updateFocus("reverse");
+        } else if (this.startIndex > 0) {
+          this.paginateData("reverse");
+        } else {
           this.updateFocus("reverse");
           this.updateScrollValue("reverse");
         }
       },
       [KEYS.FORWARD]: () => {
-        if(!this.focusedIndex){
+        if (!this.focusedIndex) {
           this.updateFocus();
           this.updateScrollValue();
-        }else if(this.items[this.endIndex-1]){
-          this.paginateData()
-        }else{
+        } else if (this.items[this.endIndex - 1]) {
+          this.paginateData();
+        } else {
           this.updateFocus();
         }
       },
@@ -179,7 +181,6 @@ export default {
     // focusHandler.$off("RESET_FOCUS", this.resetFocus);
     // focusHandler.$off("SET_FOCUS", this.setExternalFocus);
   },
-  
 };
 </script>
 
@@ -187,7 +188,7 @@ export default {
 .smart-carousel {
   display: flex;
 }
-.vertical{
+.vertical {
   flex-direction: column;
 }
 </style>

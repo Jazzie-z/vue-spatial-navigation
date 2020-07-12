@@ -1,18 +1,14 @@
 <template>
   <div class="container" v-bind:class="{ focus: isFocused }">
     <div class="title-container">
-      <img
-        :src="channelLogo"
-      />
-      <div class="number">{{channelNumber}}</div>
+      <img :src="channelLogo" />
+      <div class="number">{{ channelNumber }}</div>
     </div>
     <div class="image-container">
-      <img
-        :src="image"
-      />
+      <img :src="image" />
     </div>
     <div class="info-container">
-      <div class="title">{{title}}</div>
+      <div class="title">{{ title }}</div>
       <div class="progress">
         <div class="progress-bar">
           <div></div>
@@ -25,7 +21,7 @@
 <script>
 export default {
   inheritAttrs: false,
-  props: ["isFocused","title","image","channelNumber","channelLogo"],
+  props: ["isFocused", "title", "image", "channelNumber", "channelLogo"],
 };
 </script>
 

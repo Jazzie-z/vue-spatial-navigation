@@ -1,20 +1,16 @@
 <template>
   <div class="carousel">
     <div class="title" v-if="title">{{ title }}</div>
-    <Carousel
-      v-bind="$attrs"
-      renderType="SmartCarousel"
-      v-on="$listeners"
-    />
+    <Carousel v-bind="$attrs" renderType="SmartCarousel" v-on="$listeners" />
   </div>
 </template>
 
 <script>
 export default {
   inheritAttrs: false,
-  props:['title'],
+  props: ["title"],
   components: {
-    Carousel: () => import("@/dstv/components/Dynamic")
+    Carousel: () => import("@/dstv/components/Dynamic"),
   },
 };
 </script>

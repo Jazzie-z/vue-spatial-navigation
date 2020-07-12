@@ -4,6 +4,8 @@ import DstvApp from "@/dstv/App.vue";
 import router from "./router";
 import DstvRouter from "@/dstv/router";
 import { store } from "@/dstv/store/store";
+import { Plugin } from "vue-fragment";
+Vue.use(Plugin);
 Vue.config.productionTip = false;
 
 const DSTV = true;

@@ -1,5 +1,5 @@
 <template>
-  <div class="menu" >
+  <div class="menu">
     <Dynamic
       v-if="menuData.length"
       :items="menuData"
@@ -10,11 +10,11 @@
       renderType="Nav"
       :shouldHide="shouldHide"
     />
-  </div>  
+  </div>
 </template>
 
 <script>
-import Dynamic from "@/dstv/components/Dynamic"
+import Dynamic from "@/dstv/components/Dynamic";
 import {
   enableNavigation,
   disableNavigation,
@@ -31,10 +31,10 @@ export default {
   data() {
     return {
       isFocused: true,
-      shouldHide: false
+      shouldHide: false,
     };
   },
-  updated(){
+  updated() {
     // console.error(this.shouldHide)
   },
   computed: mapState({
@@ -71,12 +71,14 @@ export default {
     keyListener({ component, accepted }) {
       switch (component) {
         case COMPONENTS.MAIN_COMPONENT:
-          if (accepted) {this.isFocused = false;
-          this.shouldHide = true}
+          if (accepted) {
+            this.isFocused = false;
+            this.shouldHide = true;
+          }
           break;
         case COMPONENTS.MENU:
           this.isFocused = true;
-          this.shouldHide = false
+          this.shouldHide = false;
           break;
         case COMPONENTS.EXIT:
           alert("SHOULD EXIT NOW");
@@ -120,5 +122,4 @@ export default {
   z-index: 5;
   position: relative;
 }
-
 </style>

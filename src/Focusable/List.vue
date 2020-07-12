@@ -163,7 +163,7 @@ export default {
         prevIndex: this.focusedIndex,
         newIndex,
         item: this.items[newIndex],
-        id: this.id
+        id: this.id,
       };
       // this.$parent.$emit("onFocusChange", { ...payload, fromChild: true });
       this.$emit("onFocusChange", payload);

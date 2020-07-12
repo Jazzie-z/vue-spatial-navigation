@@ -1,5 +1,5 @@
 <template>
-  <div class="nav-list" v-bind:class="{hide: shouldHide}">
+  <div class="nav-list" v-bind:class="{ hide: shouldHide }">
     <Dynamic
       v-bind="this.$attrs"
       v-on="this.$listeners"
@@ -12,10 +12,10 @@
 <script>
 import Dynamic from "@/dstv/components/Dynamic";
 export default {
-  props:['shouldHide','animate'],
+  props: ["shouldHide", "animate"],
   inheritAttrs: false,
   components: {
-    Dynamic:()=>import("@/dstv/components/Dynamic"),
+    Dynamic: () => import("@/dstv/components/Dynamic"),
   },
   data() {
     return {
@@ -35,7 +35,7 @@ export default {
     text-align: center;
     align-items: center;
     justify-content: center;
-  }  
+  }
 }
 .hide {
   transform: translateY(-116px);

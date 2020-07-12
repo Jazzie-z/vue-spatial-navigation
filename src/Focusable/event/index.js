@@ -19,8 +19,7 @@ export const enableNavigation = (actionCB) => {
     if (index > -1) {
       actions[index] = actionCB;
     } else {
-      if (actionCB.callFirst)
-        actions.unshift(actionCB)
+      if (actionCB.callFirst) actions.unshift(actionCB);
       else actions.push(actionCB);
     }
   } else {
