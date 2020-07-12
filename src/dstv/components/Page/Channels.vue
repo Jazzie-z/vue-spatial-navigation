@@ -1,53 +1,27 @@
 <template>
   <div class="channels">
-    <Background />
-    <!-- <div class="section">        
-        <List
-            v-if="section.data"
-            :child="child"
-            :items="section.data"
-            :isFocused="isFocused && focusedIndex===0"
-            :shouldScroll="true"
-            :scrollLimit="section.data.length - 5"
-            v-on:onFocusChange="onFocusChange"
-            v-on:onSelect="onSelect"
-            id="livetv-section"
-        />
-        </div>
-        <Carousel
-            v-if="data"
-            :items="data"
-            :isFocused="isFocused && focusedIndex===1"
-            :shouldScroll="true"
-            :scrollLimit="section.data.length - 5"
-            renderType="16x9"
-            id="livetv-carousel"
-        /> -->
-    <List
-      ref="verticalList"
+    <Dynamic renderType="Background"/>
+    <div class="title">{{title}}</div>
+    <Dynamic
+      ref="verticalList"      
       :child="child"
-      :isFocused="isFocused"
+      :isFocused="isFocused"      
       :items="channelData"
       orientation="VERTICAL"
       id="vertical-list"
       :disabled="loading"
       v-on:onFocusChange="onFocusChange"
+      renderType="List"
     />
-    {{ channelData.length }}
-    <Loader class="loader" v-if="loading" />
-    <NoContent v-if="noContent"></NoContent>
+    <div class='overlay' v-bind:class="{show:hideSection}"></div>
+    <Dynamic renderType="Loader" v-if="loading" />
+    <Dynamic v-if="noContent" renderType="NoContent"/>
   </div>
 </template>
 
 <script>
 import { mapState, mapActions } from "vuex";
-import List from "@/Focusable/List";
-import MenuButton from "@/dstv/components/Core/MenuButton/MenuButton";
-import Background from "@/dstv/components/Core/Background/Background";
-import Loader from "@/dstv/components/Core/Loader/Loader";
-import Carousel from "@/dstv/components/Collection/Carousel";
-import Nav from "@/dstv/components/Collection/Nav";
-import NoContent from "@/dstv/components/Core/NoContent/NoContent";
+import Dynamic from "@/dstv/components/Dynamic"
 import {
   enableNavigation,
   disableNavigation,
@@ -60,20 +34,23 @@ import { COMPONENTS } from "@/dstv/constants/focusEvent";
 
 export default {
   components: {
-    List,
-    Background,
-    Loader,
-    NoContent,
+    Dynamic: ()=>import("@/dstv/components/Dynamic"),
   },
   data() {
     return {
-      child: [Nav, Carousel], //[MenuButton],
+      child: [Dynamic, Dynamic], //[MenuButton],
       focusedIndex: 0,
       isFocused: false,
       channelData: [],
+      hideSection: false,
+      title:''
     };
   },
-  computed: mapState({
+  updated(){
+    // console.error(this.$router)
+  },
+  computed: {
+    ...mapState({
     section: (state) => state.section.livetv || {},
     loading: (state) => state.section.loading || state.channel.loading,
     data: (state) => state.channel.data,
@@ -83,6 +60,8 @@ export default {
       !state.channel.error &&
       !state.channel.loading,
   }),
+  
+  },
   watch: {
     section(newValue, oldValue) {
       if (newValue.data && !oldValue.data) {
@@ -109,6 +88,9 @@ export default {
         this.isFocused = false;
       }
     },
+    hideSection(){
+      this.useSectionData()
+    }
   },
   methods: {
     ...mapActions(["getSectionData", "getChannelData", "setError"]),
@@ -117,20 +99,22 @@ export default {
       else this.setFocusToMenu();
     },
     fetchChannelData() {
-      let url = this.section.data[0].endpoint;
-      this.getChannelData(url);
+      let initialSection = this.section.data[0];
+      this.title= initialSection.displayName
+      this.getChannelData(initialSection.endpoint);
     },
     useChannelData() {
       let index = this.channelData.findIndex(
-        (item) => item.renderType === "16x9"
+        (item) => item.renderType === "SmartCarousel"
       );
       focusHandler.$emit("RESET_FOCUS", { id: "child-channel-carousel" });
       let payload = {
-        items: this.data,
+        items: this.data.slice(0,14),
         shouldScroll: true,
         scrollLimit: this.data.length - 3,
-        renderType: "16x9",
+        renderType: "SmartCarousel",
         id: "channel-carousel",
+        maxVisibility: 5
       };
       if (index > -1) {
         this.channelData.splice(index, 1, payload);
@@ -139,13 +123,15 @@ export default {
       }
     },
     useSectionData() {
-      this.channelData.push({
+      this.channelData.splice(0,1,{
         items: this.section.data,
-        child: [MenuButton],
+        child: [Dynamic],
         shouldScroll: true,
         scrollLimit: this.section.data.length - 5,
         id: "section",
-      });
+        renderType: 'Nav',
+        shouldHide: this.hideSection
+      })      
     },
     keyListener({ component, accepted }) {
       if (component === COMPONENTS.MAIN_COMPONENT && this.section.data) {
@@ -165,12 +151,20 @@ export default {
       this.isFocused = false;
       this.focusedIndex = 0;
     },
-    onFocusChange({ item }) {
-      if (item.endpoint) this.getChannelData(item.endpoint);
+    onFocusChange({ item, newIndex, id }) {
+      if (item.endpoint) {
+        this.title= item.displayName;
+        this.getChannelData(item.endpoint);
+      }
+      if(id==='section' || (id==='vertical-list' && newIndex===0)){
+        this.hideSection = false
+      }else{
+        this.hideSection = true
+      }
     },
     onSelect() {},
   },
-  mounted() {
+  created() {
     if (!this.section.data) this.getSectionData("livetv");
     else {
       this.useSectionData();
@@ -179,13 +173,11 @@ export default {
     registerFocusDispatcher(this.keyListener);
     enableNavigation({
       UP: () => {
-        if (!this.$refs.verticalList.prevIndex) this.setFocusToMenu();
+        if(!this.$refs.verticalList.$children[0].focusedIndex) 
+        this.setFocusToMenu();        
       },
       BACK: () => {
         console.error("BACK PRESSED");
-      },
-      DOWN: () => {
-        // if(!this.focusedIndex && this.data.length) this.focusedIndex = 1
       },
       preCondition: () => this.isFocused,
       id: "livetv",
@@ -204,8 +196,32 @@ export default {
   top: 0;
   width: 1280px;
 }
-/deep/ .vertical .list {
-  white-space: nowrap;
-  padding-left: 125px;
+.title {
+  position: absolute;
+  top: 55px;
+  color: #9b9b9b;
+  width: 100%;
+  font-size: 24px;
 }
+/deep/ .vertical {
+  .list, .smart-carousel{
+    white-space: nowrap;
+  padding-left: 125px;  
+  }
+  
+}
+  .overlay{
+    height:100vh;
+    width:100%;
+    background: black;
+    opacity:0.5;
+    position: absolute;
+    top:0;
+    transform: translateY(116px);
+    transition: transform 0.5s;
+  }
+  .show {
+    transform: translateY(0);
+    opacity:0;
+  }
 </style>

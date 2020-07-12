@@ -8,6 +8,7 @@
 import Selectable from "@/Focusable/Selectable";
 export default {
   extends: Selectable,
+  inheritAttrs: false,
   props: ["id", "src", "isFocused", "disabled"],
 };
 </script>
@@ -20,7 +21,7 @@ export default {
 }
 img {
   width: 157px;
-  filter: brightness(0.5);
+  filter: brightness(0.5); 
 }
 .focus {
   transform: scale(1.2);

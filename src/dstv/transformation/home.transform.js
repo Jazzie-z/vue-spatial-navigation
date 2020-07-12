@@ -6,10 +6,12 @@ export const transformHomeData = (data) => {
         items: editorialItems.map(({ id, image }) => ({
           id: id,
           src: image.LARGE,
+          renderType: "CardPoster",
         })),
         title: name,
         id: name,
-        renderType: "poster",
+        renderType: "Carousel",
+        maxVisibility:7
       }));
   }
   return data;

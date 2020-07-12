@@ -1,27 +1,25 @@
 <template>
-  <div class="nav-list">
-    <List
+  <div class="nav-list" v-bind:class="{hide: shouldHide}">
+    <Dynamic
+      v-bind="this.$attrs"
+      v-on="this.$listeners"
       :child="child"
-      :items="items"
-      :isFocused="isFocused"
-      :shouldScroll="shouldScroll"
-      :scrollLimit="scrollLimit"
-      :id="id"
+      renderType="List"
     />
   </div>
 </template>
 
 <script>
-import List from "@/Focusable/List";
-import MenuButton from "@/dstv/components/Core/MenuButton/MenuButton";
+import Dynamic from "@/dstv/components/Dynamic";
 export default {
-  props: ["items", "isFocused", "shouldScroll", "scrollLimit", "id"],
+  props:['shouldHide','animate'],
+  inheritAttrs: false,
   components: {
-    List,
+    Dynamic:()=>import("@/dstv/components/Dynamic"),
   },
   data() {
     return {
-      child: [MenuButton],
+      child: [Dynamic],
     };
   },
 };
@@ -37,6 +35,9 @@ export default {
     text-align: center;
     align-items: center;
     justify-content: center;
-  }
+  }  
+}
+.hide {
+  transform: translateY(-116px);
 }
 </style>

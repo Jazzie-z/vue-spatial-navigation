@@ -19,7 +19,9 @@ export const enableNavigation = (actionCB) => {
     if (index > -1) {
       actions[index] = actionCB;
     } else {
-      actions.push(actionCB);
+      if (actionCB.callFirst)
+        actions.unshift(actionCB)
+      else actions.push(actionCB);
     }
   } else {
     registered = true;

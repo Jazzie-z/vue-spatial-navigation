@@ -4,6 +4,7 @@
     v-bind:class="{ focus: isFocused, vertical: orientation === 'VERTICAL' }"
     ref="list"
     v-bind:style="style"
+    :id="id"
   >
     <div
       class="child"
@@ -14,7 +15,7 @@
       <component
         :is="child[index] || child[0]"
         v-bind="item"
-        :id="`child-${item.id || index}`"
+        :id="`${item.id || index}`"
         :isFocused="isFocused && index === focusedIndex"
         v-bind:class="{ disabled: disabledIndex.includes(index) }"
         :disabled="item.disabled || disabledIndex.includes(index)"
@@ -162,8 +163,9 @@ export default {
         prevIndex: this.focusedIndex,
         newIndex,
         item: this.items[newIndex],
+        id: this.id
       };
-      this.$parent.$emit("onFocusChange", { ...payload, fromChild: true });
+      // this.$parent.$emit("onFocusChange", { ...payload, fromChild: true });
       this.$emit("onFocusChange", payload);
     },
     getValidNextIndex(initial) {

@@ -74,6 +74,7 @@ const getCard = (item) => {
     },
     isEventAvailable,
     channelName: item.channelName || item.name,
+    renderType:'Card16x9'
   };
 };
 export const transformChannelData = (data) => {

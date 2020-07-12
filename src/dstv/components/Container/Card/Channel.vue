@@ -2,17 +2,17 @@
   <div class="container" v-bind:class="{ focus: isFocused }">
     <div class="title-container">
       <img
-        src="https://rndcdn.dstv.com/dstvcms/2016/07/01/DStv_M-Net-Movies-Premiere_new4-3logo_005_xlrg.png"
+        :src="channelLogo"
       />
-      <div class="number">256</div>
+      <div class="number">{{channelNumber}}</div>
     </div>
     <div class="image-container">
       <img
-        src="https://cdn.dstv.com/www.dstv.com/epg//guide/191933_christmas_at_pemberley_manor_2019.jpg"
+        :src="image"
       />
     </div>
     <div class="info-container">
-      <div class="title">Channel name</div>
+      <div class="title">{{title}}</div>
       <div class="progress">
         <div class="progress-bar">
           <div></div>
@@ -25,7 +25,7 @@
 <script>
 export default {
   inheritAttrs: false,
-  props: ["isFocused"],
+  props: ["isFocused","title","image","channelNumber","channelLogo"],
 };
 </script>
 

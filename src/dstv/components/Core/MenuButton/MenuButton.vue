@@ -8,6 +8,7 @@
 import Selectable from "@/Focusable/Selectable";
 export default {
   extends: Selectable,
+  inheritAttrs: false,
   props: ["id", "displayName", "isFocused"],
 };
 </script>

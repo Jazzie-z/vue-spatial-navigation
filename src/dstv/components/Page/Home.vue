@@ -1,27 +1,26 @@
 <template>
-  <div class="home" v-bind:class="{ animate: animate, focus: isFocused }">
+  <div class="home" v-bind:class="{ focus: isFocused }">
     <div class="carousel-wrapper">
-      <List
+      <Dynamic
         ref="verticalCarousel"
         :child="child"
         :isFocused="isFocused"
         :items="data"
-        :shouldScroll="shouldScroll"
+        :shouldScroll="true"
         orientation="VERTICAL"
-        v-on:onFocusChange="onFocusChange"
-        v-on:onSelect="onSelect"
         id="vertical-carousel"
+        renderType="SmartCarousel"
+        :maxVisibility=3
         :scrollLimit="data.length - 1"
+        v-on:onFocusChange="onFocusChange"
       />
     </div>
-    <Loader v-if="loading" />
+    <Dynamic v-if="loading" renderType="Loader"/>
   </div>
 </template>
 
 <script>
-import List from "@/Focusable/List";
-import Carousel from "@/dstv/components/Collection/Carousel";
-import Loader from "@/dstv/components/Core/Loader/Loader";
+import Dynamic from "@/dstv/components/Dynamic"
 import {
   enableNavigation,
   disableNavigation,
@@ -33,16 +32,12 @@ import { COMPONENTS } from "@/dstv/constants/focusEvent";
 import { mapState, mapActions } from "vuex";
 export default {
   components: {
-    List,
-    Loader,
+    Dynamic
   },
   data() {
     return {
-      child: [Carousel],
-      shouldScroll: true,
+      child: [Dynamic],
       isFocused: false,
-      animate: false,
-      // error: "",
     };
   },
   computed: mapState({
@@ -69,12 +64,8 @@ export default {
   },
   methods: {
     ...mapActions(["getHomeData", "setError"]),
-    toggleAnimation() {
-      this.animate = !this.animate;
-    },
-    keyDownHandler(ev) {
-      let keys = ["200", "195", "81", "13"];
-      if (keys.includes(ev.keyCode.toString())) this.toggleAnimation();
+    onFocusChange(item){
+      console.error('focus changed',item)
     },
     keyListener({ component, accepted }) {
       if (component === COMPONENTS.MAIN_COMPONENT && this.data.length) {
@@ -88,27 +79,6 @@ export default {
         }
       }
     },
-    checkAndStopVerticalScroll({ prevIndex, newIndex }) {
-      if (newIndex > prevIndex) {
-        if (newIndex > this.data.length - 3 && this.shouldScroll) {
-          this.shouldScroll = false;
-        } else if (!this.shouldScroll) {
-          this.shouldScroll = true;
-        }
-      } else {
-        if (newIndex > this.data.length - 2 && this.shouldScroll) {
-          this.shouldScroll = false;
-        } else if (!this.shouldScroll) {
-          this.shouldScroll = true;
-        }
-      }
-    },
-    onFocusChange({ prevIndex, newIndex }) {
-      this.checkAndStopVerticalScroll({ prevIndex, newIndex });
-    },
-    onSelect(item) {
-      console.log("CALLED HERE IN SELECT", item);
-    },
     setFocusToMenu() {
       dispatchFocus({ component: COMPONENTS.MENU });
       this.isFocused = false;
@@ -116,18 +86,19 @@ export default {
     isFirstCarouselFocused() {
       return (
         this.$refs.verticalCarousel &&
-        this.$refs.verticalCarousel.prevIndex === 0
+        this.$refs.verticalCarousel.$children[0] &&
+        // this.$refs.verticalCarousel.$children[0].prevIndex === 0 &&
+        // this.$refs.verticalCarousel.$children[0].startIndex === 0
+        this.$refs.verticalCarousel.$children[0].endReached
       );
     },
-  },
-  created() {
-    window.addEventListener("keydown", this.keyDownHandler);
   },
   mounted() {
     if (this.isMenuLoaded && !this.data.length) this.getHomeData();
     registerFocusDispatcher(this.keyListener);
     enableNavigation({
       UP: () => {
+        console.error(this.$refs.verticalCarousel.$children[0].endReached)
         if (this.isFirstCarouselFocused()) this.setFocusToMenu();
       },
       BACK: () => this.setFocusToMenu(),
@@ -137,7 +108,6 @@ export default {
   },
   destroyed() {
     unRegisterFocusDispatcher(this.keyListener);
-    window.addEventListener("keydown", this.keyDownHandler);
     disableNavigation("home");
   },
 };
@@ -162,11 +132,5 @@ export default {
   margin-top: 72px;
   padding-left: 128px;
   overflow: hidden;
-}
-.animate {
-  background: #1e3059;
-  * {
-    transition-duration: 0.5s;
-  }
 }
 </style>

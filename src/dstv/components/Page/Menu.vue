@@ -1,18 +1,20 @@
 <template>
-  <div class="menu" v-bind:class="{ hide: !isFocused }">
-    <Nav
+  <div class="menu" >
+    <Dynamic
       v-if="menuData.length"
       :items="menuData"
       :isFocused="isFocused"
       v-on:onFocusChange="onFocusChange"
       v-on:onSelect="onSelect"
       id="menu"
+      renderType="Nav"
+      :shouldHide="shouldHide"
     />
-  </div>
+  </div>  
 </template>
 
 <script>
-import Nav from "@/dstv/components/Collection/Nav";
+import Dynamic from "@/dstv/components/Dynamic"
 import {
   enableNavigation,
   disableNavigation,
@@ -24,12 +26,16 @@ import { COMPONENTS } from "@/dstv/constants/focusEvent";
 import { mapState, mapActions } from "vuex";
 export default {
   components: {
-    Nav,
+    Dynamic,
   },
   data() {
     return {
       isFocused: true,
+      shouldHide: false
     };
+  },
+  updated(){
+    // console.error(this.shouldHide)
   },
   computed: mapState({
     menuData: (state) => state.menu.data || [],
@@ -65,10 +71,12 @@ export default {
     keyListener({ component, accepted }) {
       switch (component) {
         case COMPONENTS.MAIN_COMPONENT:
-          if (accepted) this.isFocused = false;
+          if (accepted) {this.isFocused = false;
+          this.shouldHide = true}
           break;
         case COMPONENTS.MENU:
           this.isFocused = true;
+          this.shouldHide = false
           break;
         case COMPONENTS.EXIT:
           alert("SHOULD EXIT NOW");
@@ -109,11 +117,8 @@ export default {
 
 <style lang="scss" scoped>
 .menu {
-  transition: transform 0.5s;
   z-index: 5;
   position: relative;
 }
-.hide {
-  transform: translateY(-116px);
-}
+
 </style>
