@@ -7,12 +7,10 @@
           :child="child"
           :isFocused="isFocused"
           :items="data"
-          :shouldScroll="true"
           orientation="VERTICAL"
           id="vertical-carousel"
           renderType="SmartCarousel"
           :maxVisibility="3"
-          :scrollLimit="data.length - 1"
           v-on:onFocusChange="onFocusChange"
         />
       </div>
@@ -100,7 +98,6 @@ export default {
     registerFocusDispatcher(this.keyListener);
     enableNavigation({
       UP: () => {
-        console.error(this.$refs.verticalCarousel.$children[0].endReached);
         if (this.isFirstCarouselFocused()) this.setFocusToMenu();
       },
       BACK: () => this.setFocusToMenu(),

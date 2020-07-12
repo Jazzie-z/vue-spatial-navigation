@@ -109,6 +109,13 @@ export default {
     isNextItemPresent() {
       return this.focusedIndex < this.items.length - 1;
     },
+    emitFocusChange(newIndex) {
+      let payload = {
+        item: this.visibleItems[newIndex],
+        id: this.id,
+      };
+      this.$emit("onFocusChange", payload);
+    },
     getValidNextIndex() {
       let validIndex = this.focusedIndex + 1;
       if (this.visibleItems[validIndex]) return validIndex;
@@ -129,6 +136,8 @@ export default {
       } else {
         this.focusedIndex = this.getValidNextIndex();
       }
+      if (this.prevIndex !== this.focusedIndex)
+        this.emitFocusChange(this.focusedIndex);
     },
     updateScrollValue(reverse) {
       if (this.$refs.childItem) {
@@ -145,6 +154,7 @@ export default {
       let value = reverse ? -1 : 1;
       this.startIndex += value;
       this.endIndex += value;
+      this.emitFocusChange(this.focusedIndex);
     },
   },
   mounted() {

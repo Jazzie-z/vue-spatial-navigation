@@ -1,7 +1,7 @@
 <template>
   <div class="carousel">
     <div class="title" v-if="title">{{ title }}</div>
-    <Carousel v-bind="$attrs" renderType="SmartCarousel" v-on="$listeners" />
+    <Dynamic v-bind="$attrs" renderType="SmartCarousel" v-on="$listeners" />
   </div>
 </template>
 
@@ -10,7 +10,7 @@ export default {
   inheritAttrs: false,
   props: ["title"],
   components: {
-    Carousel: () => import("@/dstv/components/Dynamic"),
+    Dynamic: () => import("@/dstv/components/Dynamic"),
   },
 };
 </script>
