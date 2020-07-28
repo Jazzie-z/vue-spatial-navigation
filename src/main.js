@@ -8,7 +8,7 @@ import { Plugin } from "vue-fragment";
 Vue.use(Plugin);
 Vue.config.productionTip = false;
 
-const DSTV = true;
+const DSTV = false;
 
 let AppModule = App;
 let props = { router };
