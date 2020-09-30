@@ -7,7 +7,7 @@ https://vue-spatial-navigation.herokuapp.com/list
 ## Screenshots
 
 <div>
-  List
+  <div>List<div/>
 <img src="snapshot/list.PNG" alt="list" width="800"/>
   Carousel
 <img src="snapshot/carousel.PNG" alt="carousel" width="800"/>
