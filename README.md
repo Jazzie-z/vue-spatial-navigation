@@ -9,9 +9,9 @@ https://vue-spatial-navigation.herokuapp.com/list
 <div>
   <div>List<div/>
 <img src="snapshot/list.PNG" alt="list" width="800"/>
-  Carousel
+    <div>Carousel</div>
 <img src="snapshot/carousel.PNG" alt="carousel" width="800"/>
-  Grid
+    <div>Grid</div>
 <img src="snapshot/grid.PNG" alt="grid" width="800"/>
 </div>
 
