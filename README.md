@@ -29,26 +29,60 @@ import {FocusableList} from "vue-tv";
     :child="Button" //custom component
     :isFocused="true" //to set focus
     :items="items" //array to loop
-    :shouldScroll="shouldScroll" 
     v-on:onFocusChange="onFocusHandler"
   />
 
 ```
 #### List with disabled
 ```bash
-import {FocusableList} from "vue-tv";
-
 <List
-    :child="Button" //custom component
-    :isFocused="true" //to set focus
-    :items="items" //array to loop
-    :shouldScroll="shouldScroll" 
-    v-on:onFocusChange="onFocusHandler"
-    disabledIndex=[0,2,3] //index
+    :child="Button" 
+    :isFocused="true" 
+    :items="items" 
+    :disabledIndex=[0,2,3] //index
   />
-
+```
+#### Nested Carousel
+```bash
+<List
+    :child="child"
+    :isFocused="true"
+    :items="items"
+    :shouldScroll="true"
+    orientation="VERTICAL"
+  />
+  ...
+  
+  data() {
+    return {
+      items: [
+        {
+          child: Card,
+          shouldScroll: true,
+          items: carouselData[0],
+        },
+        {
+          child: Card,
+          shouldScroll: true,
+          items: carouselData[1],
+        },
+      ],
+      child: List,
+      shouldScroll: true,
+    };
+  },
+```
+#### Grid
+```bash
+<Grid
+    :child="Card"
+    :isFocused="true"
+    :items="items"
+    :shouldScroll="true"
+    :maxColumn="4"
+  />
 ```
 
-### `Readme will be updated soon!`
+- ### `Readme will be updated soon!`
 
 Please check the examples folder for reference for now.
