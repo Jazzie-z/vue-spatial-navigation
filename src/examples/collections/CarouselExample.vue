@@ -9,21 +9,19 @@
 </template>
 
 <script>
-import List from "@/components/Focusable/List";
-import Card from "@/components/Card";
-import { mockImage } from "@/mock";
+import List from "@/focusable/List";
+import Card from "@/examples/components/Card";
+import { carouselData } from "../mock/mock";
 export default {
   components: {
     List,
   },
   data() {
     return {
-      items: mockImage.map((item) => ({ items: item })),
+      items: carouselData[0].map((item) => ({ items: item, height: '300px' })),
       Card: Card,
       shouldScroll: true,
     };
   },
 };
 </script>
-
-<style lang="scss" scoped></style>

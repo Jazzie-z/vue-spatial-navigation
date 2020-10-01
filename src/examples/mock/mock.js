@@ -6,6 +6,11 @@ export const ListData = [...new Array(5)].map((e, i) => ({
   title: `Button : ${i + 1}`,
 }));
 
+export const carouselData= [
+  ["https://i.pinimg.com/originals/c8/b9/96/c8b996c290036cd3faa51b64bad9bb3f.jpg","https://payload.cargocollective.com/1/20/649749/13424433/054_LIAR_KEYART_LR_dpho_1600_c.jpg","https://cdn.europosters.eu/image/750/posters/sherlock-series-4-iconic-i33910.jpg","https://vignette.wikia.nocookie.net/lostpedia/images/a/ac/Lost-SeasonOneEdited.jpg/revision/latest?cb=20160421202659","https://cdn.shopify.com/s/files/1/0969/9128/products/HowIMetYourMother-ClassicTVShowPoster6_9f036955-fdf1-479d-b709-0ed93d542fe5.jpg?v=1596545743"],
+  ["https://data.whicdn.com/images/315481452/original.jpg","https://cdn.shopify.com/s/files/1/0969/9128/products/Poster_-_Orange_Is_The_New_Black_-_Cast_-_TV_Show_Collection_c8ab09c3-f890-45c7-8f79-9d91eba7de3a.jpg?v=1537864237","https://tvseriesfinale.com/wp-content/uploads/2016/08/Supergirl-TV-series-on-The-CW-season-two-key-art-canceled-or-renewed-e1472497949337.jpg","https://i.pinimg.com/originals/42/ce/36/42ce36d1d6e18dcae77d6eabba6bf902.jpg","https://i0.wp.com/film-book.com/wp-content/uploads/2019/08/batwoman-tv-show-poster-04-1001x1500.jpg?resize=500%2C749&ssl=1"]
+]
+
 export const gridData = [
   "https://img1.hotstarext.com/image/upload/f_auto,t_web_hs_1_5x/sources/r1/cms/prod/1265/701265-h",
   "https://img1.hotstarext.com/image/upload/f_auto,t_web_hs_1_5x/sources/r1/cms/prod/4600/674600-h",

@@ -9,9 +9,9 @@
 </template>
 
 <script>
-import List from "@/components/Focusable/List";
-import Button from "@/components/Button";
-import { ListData } from "./mock";
+import List from "@/focusable/List";
+import Button from "@/examples/components/Button";
+import { ListData } from "../mock/mock";
 export default {
   props: ["shouldScroll"],
   components: {
@@ -26,5 +26,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped></style>

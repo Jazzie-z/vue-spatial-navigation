@@ -8,7 +8,8 @@
 </template>
 
 <script>
-import { routes } from "@/router";
+import { routes } from "@/examples/router";
+
 export default {
   data() {
     return {
@@ -18,7 +19,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="css" scoped>
 .side-nav {
   float: left;
   height: 100vh;
@@ -26,23 +27,23 @@ export default {
   flex-direction: column;
   text-align: left;
   background: grey;
-  width: 300px;
-  .title {
+  width: 300px;  
+}
+.side-nav .title {
     padding: 20px;
     text-align: center;
     color: white;
     font-size: 24px;
     background: #41b883;
   }
-  a {
+.side-nav .router-link-active {
+    background: #35495e;
+  }
+.side-nav a {
     background: grey;
     padding: 20px;
     color: white;
     text-decoration: none;
     font-size: 24px;
   }
-  .router-link-active {
-    background: #35495e;
-  }
-}
 </style>

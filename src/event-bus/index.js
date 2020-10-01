@@ -1,4 +1,5 @@
-import { focusHandler } from "../main";
+import Vue from 'vue'
+export const focusHandler = new Vue()
 let registered = false;
 let actions = [];
 const KEY_CODE = {

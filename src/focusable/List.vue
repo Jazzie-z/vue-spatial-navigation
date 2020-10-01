@@ -24,11 +24,10 @@
 </template>
 
 <script>
-import { enableNavigation, disableNavigation } from "@/focus/event";
-import { focusHandler } from "@/main";
+import { enableNavigation, disableNavigation, focusHandler } from "@/event-bus";
 
 export default {
-  name: "focusable-list",
+  name: "focusableList",
   props: {
     child: {
       type: Object, //Child component (eg: card, button)
@@ -247,7 +246,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="css" scoped>
 .list {
   display: flex;
 }
