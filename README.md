@@ -1,4 +1,4 @@
-# vue-spatial-navigation
+# vue-tv(vue-spatial-navigation)
   Focus library for smart Tv application using Vue js and event-bus
 
 ## Demo
@@ -35,3 +35,5 @@ import {FocusableList} from "vue-tv";
 ```
 
 Readme will be updated soon!
+
+Please check the examples folder for reference for now.
