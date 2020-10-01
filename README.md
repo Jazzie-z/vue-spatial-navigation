@@ -1,4 +1,5 @@
 # vue-spatial-navigation
+  Focus library for smart Tv application using Vue js and event-bus
 
 ## Demo
 Check out the demo here
@@ -15,30 +16,23 @@ https://vue-spatial-navigation.herokuapp.com/list
 <img src="snapshot/grid.PNG" alt="grid" width="800"/>
 </div>
 
-## Project setup
+## Getting Started
 
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-
-```
-npm run serve
+```bash
+npm install vue-tv
 ```
 
-### Compiles and minifies for production
+```bash
+import {FocusableList} from "vue-tv";
+
+<List
+    :child="Button" //custom component
+    :isFocused="true" //to set focus
+    :items="items" //array to loop
+    :shouldScroll="shouldScroll" 
+    v-on:onFocusChange="onFocusHandler"
+  />
 
 ```
-npm run build
-```
 
-### Lints and fixes files
-
-```
-npm run lint
-```
-
-### Customize configuration
-
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Readme will be updated soon!
