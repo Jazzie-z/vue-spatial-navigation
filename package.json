@@ -1,9 +1,13 @@
 {
   "name": "vue-tv",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Spatial navigation library based on Vue js",
   "author": "Jazzie-Jay",
-  "keywords": ["vue","spatial-navigation","smarttv"],
+  "keywords": [
+    "vue",
+    "spatial-navigation",
+    "smarttv"
+  ],
   "main": "dist/vue-spatial-navigation.ssr.js",
   "browser": "dist/vue-spatial-navigation.esm.js",
   "module": "dist/vue-spatial-navigation.esm.js",
