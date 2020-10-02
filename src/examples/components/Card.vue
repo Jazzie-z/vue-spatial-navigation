@@ -1,12 +1,12 @@
 <template>
   <div>
-    <img :src="items" v-bind:class="{ focus: isFocused }" :style="{height:height}"/>
+    <img :src="items" v-bind:class="{ focus: isFocused }" :style="{height:height, width:width}"/>
   </div>
 </template>
 
 <script>
 export default {
-  props: ["items", "isFocused", "disabled","height"],
+  props: ["items", "isFocused", "disabled","height","width"],
 };
 </script>
 

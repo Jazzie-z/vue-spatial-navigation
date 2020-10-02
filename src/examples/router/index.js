@@ -5,6 +5,7 @@ import ListDisabledExample from "@/examples/collections/ListDisabledExample";
 import CarouselExample from "@/examples/collections/CarouselExample";
 import NestedCarouselExample from "@/examples/collections/NestedCarouselExample";
 import GridExample from "@/examples/collections/GridExample";
+import SampleApp from "@/examples/pages/SampleApp"
 Vue.use(Router);
 
 export const routes = [
@@ -33,7 +34,12 @@ export const routes = [
     displayName: "Grid",
     component: GridExample,
   },
-  { path: '*', redirect: '/list' }
+  {
+    path: "/app",    
+    displayName: "Sample App",
+    component: SampleApp,
+  },
+  { path: '*', redirect: '/carousel' }
 ];
 export default new Router({
   mode: "history",

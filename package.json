@@ -18,7 +18,7 @@
     "url": "git@github.com/Jazzie-z/vue-spatial-navigation"
   },
   "publishConfig": {
-    "registry":"https://npm.pkg.github.com"
+    "registry": "https://npm.pkg.github.com"
   },
   "main": "dist/vue-spatial-navigation.ssr.js",
   "browser": "dist/vue-spatial-navigation.esm.js",
@@ -31,10 +31,13 @@
   ],
   "scripts": {
     "serve": "vue-cli-service serve dev/serve.js",
-    "build": "cross-env NODE_ENV=production rollup --config build/rollup.config.js",
-    "build:ssr": "cross-env NODE_ENV=production rollup --config build/rollup.config.js --format cjs",
-    "build:es": "cross-env NODE_ENV=production rollup --config build/rollup.config.js --format es",
-    "build:unpkg": "cross-env NODE_ENV=production rollup --config build/rollup.config.js --format iife"
+    "postinstall": "npm run build",
+    "start": "node server.js",
+    "build": "vue-cli-service build dev/serve.js --dest build",
+    "build:pkg": "cross-env NODE_ENV=production rollup --config config/rollup.config.js",
+    "build:ssr": "cross-env NODE_ENV=production rollup --config config/rollup.config.js --format cjs",
+    "build:es": "cross-env NODE_ENV=production rollup --config config/rollup.config.js --format es",
+    "build:unpkg": "cross-env NODE_ENV=production rollup --config config/rollup.config.js --format iife"
   },
   "dependencies": {
     "mitt": "^2.1.0",

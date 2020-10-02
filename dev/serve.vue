@@ -1,6 +1,5 @@
 <script>
 import Vue from 'vue';
-// import { VueSpatialNavigationSample } from '@/entry';
 import App from '@/examples/App.vue'
 
 export default Vue.extend({
