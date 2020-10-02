@@ -11,14 +11,14 @@
 <script>
 import List from "@/components/Focusable/List";
 import Card from "@/components/Card";
-import { mockImage } from "@/mock";
+import { carouselData } from '@/components/Example/mock';
 export default {
   components: {
     List,
   },
   data() {
     return {
-      items: mockImage.map((item) => ({ items: item })),
+      items: carouselData[0].map((item) => ({ items: item, height:'300px' })),
       Card: Card,
       shouldScroll: true,
     };
