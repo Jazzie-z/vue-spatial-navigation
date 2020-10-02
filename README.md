@@ -1,6 +1,6 @@
 # vue-tv(vue-spatial-navigation)
   Focus library for smart Tv application using Vue js and mitt(event-bus);
-- Supports both Vue-3 and Vue-2
+- Supports only Vue-2
 
 ## [Live demo](https://vue-spatial-navigation.herokuapp.com/list)
 
