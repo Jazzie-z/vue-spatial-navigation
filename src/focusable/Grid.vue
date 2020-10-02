@@ -168,11 +168,11 @@ export default {
       preCondition: () => this.isFocused && !this.disabled,
       id: `grid-${this.id}`,
     });
-    focusHandler.$on("RESET_FOCUS", this.resetFocus);
+    focusHandler.on("RESET_FOCUS", this.resetFocus);
   },
   destroyed() {
     disableNavigation(`grid-${this.id}`);
-    focusHandler.$off("RESET_FOCUS", this.resetFocus);
+    focusHandler.off("RESET_FOCUS", this.resetFocus);
   },
 };
 </script>

@@ -1,9 +1,8 @@
 # vue-tv(vue-spatial-navigation)
-  Focus library for smart Tv application using Vue js and event-bus
+  Focus library for smart Tv application using Vue js and mitt(event-bus);
+- Supports both Vue-3 and Vue-2
 
-## Demo
-Check out the demo here
-https://vue-spatial-navigation.herokuapp.com/list
+## [Live demo](https://vue-spatial-navigation.herokuapp.com/list)
 
 ## Screenshots
 
@@ -83,6 +82,19 @@ import {FocusableList} from "vue-tv";
   />
 ```
 
-- ### `Readme will be updated soon!`
+# Props
+| Name | Type | Required | Description | Default |
+| :- | :- | :- | :- | :- | 
+| `child` | `Vue Component`| `true` | Child widget to display on each index of list/grid |  |
+| `items` | `Array`| `true` | Array to loop through | `[]` |
+| `isFocused` | `Boolean`| `true` | To set focus & make it navigatable | `false` |
+| `defaultIndex` | `int`| `false` | Initial index to be focused | `-1` |
+| `disabled` | `Boolean`| `false` | To disable the navigation | `false` |
+| `disabledIndex` | `Array`| `false` | array of indices to disable in the list | `[-1]` |
+| `orientation` | `enum`| `false` | Direction of list and navigation.['HORIZONTAL','VERTICAL'] | `HORIZONTAL` |
+| `shouldScroll` | `Boolean`| `false` | To make list scroll as you navigate | `false` |
+| `id` | `String`| `false` | Unique Id to handle navigation | Math.random().toString() |
+
+### `Readme will be updated soon!`
 
 Please check the examples folder for reference for now.

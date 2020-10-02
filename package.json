@@ -6,7 +6,11 @@
   "keywords": [
     "vue",
     "spatial-navigation",
-    "smarttv"
+    "smarttv",
+    "navigation",
+    "key-navigation",
+    "tv",
+    "vue-tv"
   ],
   "homepage": "https://github.com/Jazzie-z/vue-spatial-navigation/tree/npm",
   "repository": {
@@ -19,7 +23,8 @@
   "unpkg": "dist/vue-spatial-navigation.min.js",
   "files": [
     "dist/*",
-    "src/**/*.vue"
+    "src/**/*.vue",
+    "src/**/*.js"
   ],
   "scripts": {
     "serve": "vue-cli-service serve dev/serve.js",
@@ -29,6 +34,7 @@
     "build:unpkg": "cross-env NODE_ENV=production rollup --config build/rollup.config.js --format iife"
   },
   "dependencies": {
+    "mitt": "^2.1.0",
     "vue": "^2.6.11"
   },
   "devDependencies": {

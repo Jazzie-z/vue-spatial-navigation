@@ -235,13 +235,13 @@ export default {
       },
       preCondition: () => this.isFocused && !this.disabled,
     });
-    focusHandler.$on("RESET_FOCUS", this.resetFocus);
-    focusHandler.$on("SET_FOCUS", this.setExternalFocus);
+    focusHandler.on("RESET_FOCUS", this.resetFocus);
+    focusHandler.on("SET_FOCUS", this.setExternalFocus);
   },
   destroyed() {
     disableNavigation(`list-${this.id}`);
-    focusHandler.$off("RESET_FOCUS", this.resetFocus);
-    focusHandler.$off("SET_FOCUS", this.setExternalFocus);
+    focusHandler.off("RESET_FOCUS", this.resetFocus);
+    focusHandler.off("SET_FOCUS", this.setExternalFocus);
   },
 };
 </script>
