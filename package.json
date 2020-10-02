@@ -15,7 +15,10 @@
   "homepage": "https://github.com/Jazzie-z/vue-spatial-navigation/tree/npm",
   "repository": {
     "type": "git",
-    "url": "git@github.com/Jazzie-z/vue-spatial-navigation/tree/npm"
+    "url": "git@github.com/Jazzie-z/vue-spatial-navigation"
+  },
+  "publishConfig": {
+    "registry":"https://npm.pkg.github.com"
   },
   "main": "dist/vue-spatial-navigation.ssr.js",
   "browser": "dist/vue-spatial-navigation.esm.js",
