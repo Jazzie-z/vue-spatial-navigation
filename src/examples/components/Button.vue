@@ -10,11 +10,13 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="css" scoped>
 .button {
-  padding: 40px;
+  padding: 30px;
   background: white;
-  font-size: 32px;
+  font-size: 24px;
+  width: fit-content;
+  white-space: nowrap;
 }
 .focus {
   background: #ff005e;

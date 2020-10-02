@@ -9,9 +9,9 @@
 </template>
 
 <script>
-import Grid from "@/components/Focusable/Grid";
-import Card from "@/components/Card";
-import { gridData } from "./mock";
+import Grid from "@/focusable/Grid";
+import Card from "@/examples/components/Card";
+import { gridData } from "../mock/mock";
 export default {
   props: ["shouldScroll"],
   components: {
@@ -26,7 +26,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="css" scoped>
 .grid {
   width: 1000px;
 }

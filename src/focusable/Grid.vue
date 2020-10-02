@@ -22,10 +22,9 @@
 </template>
 
 <script>
-import { enableNavigation, disableNavigation } from "@/focus/event";
-import { focusHandler } from "@/main";
+import { enableNavigation, disableNavigation, focusHandler } from "@/event-bus";
 export default {
-  name: "focusable-grid",
+  name: "focusableGrid",
   props: {
     child: {
       type: Object, //Child component (eg: card, button)
@@ -169,16 +168,16 @@ export default {
       preCondition: () => this.isFocused && !this.disabled,
       id: `grid-${this.id}`,
     });
-    focusHandler.$on("RESET_FOCUS", this.resetFocus);
+    focusHandler.on("RESET_FOCUS", this.resetFocus);
   },
   destroyed() {
     disableNavigation(`grid-${this.id}`);
-    focusHandler.$off("RESET_FOCUS", this.resetFocus);
+    focusHandler.off("RESET_FOCUS", this.resetFocus);
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="css" scoped>
 .grid {
   display: flex;
   flex-wrap: wrap;

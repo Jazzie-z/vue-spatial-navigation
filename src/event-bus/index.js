@@ -1,4 +1,5 @@
-import { focusHandler } from "../main";
+import mitt from 'mitt';
+export const focusHandler = new mitt();
 let registered = false;
 let actions = [];
 const KEY_CODE = {
@@ -36,8 +37,8 @@ export const disableNavigation = (id) => {
 };
 
 export const registerFocus = (callback) => {
-  focusHandler.$on("FOCUS_CHANGE", callback);
+  focusHandler.on("FOCUS_CHANGE", callback);
 };
 export const unRegisterFocus = (callback) => {
-  focusHandler.$off("FOCUS_CHANGE", callback);
+  focusHandler.off("FOCUS_CHANGE", callback);
 };
