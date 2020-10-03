@@ -57,20 +57,26 @@ export default {
 			preCondition: () => this.isFocused,
 			id: "home"
 		});
-	}
+	},
+	destroyed() {
+		unRegisterFocusDispatcher(this.keyListener);
+		disableNavigation("home");
+  },
 };
 </script>
 
 <style scoped>
+.home {
+	display: block;
+	text-align: left;
+}
 .background {
 	width: 1000px;
-	position: absolute;
+	position: relative;
 	height: 400px;
-	top: -40px;
-	left: -10px;
 	z-index: 0;
 }
 .carousel {
-	margin-top: 360px;
+	
 }
 </style>

@@ -16,6 +16,7 @@
     margin:0 15px;
     color: lightgray;
     padding: 0 5px;
+    white-space: nowrap;
 }
 .focus {
     color: white;

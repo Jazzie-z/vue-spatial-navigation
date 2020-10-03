@@ -26,6 +26,13 @@ export const homeCarousel = [
   "https://www.senselesswisdom.net/wp-content/uploads/2015/04/Her-with-Theodore-Twombly-on-red-movie-poster-wide.jpg",
 ]
 
+export const channelGrid = [
+  {title:'Blue Planet II',image:'https://i.ytimg.com/vi/_38JDGnr0vA/maxresdefault.jpg'},
+  {title:'Man Vs Wild',image:'https://images-na.ssl-images-amazon.com/images/I/91hDYmJAofL._RI_.jpg'},
+  {title:'Apolcalyse 45',image:'https://static.hollywoodreporter.com/wp-content/uploads/2020/08/unnamed-43-1598270025-928x523.jpg'},  
+  {title:'Cosmos',image:'https://tvseriesfinale.com/wp-content/uploads/2018/01/cosmos03-590x332.jpg'},
+  {title:'River monster',image:'https://i.ytimg.com/vi/W7GetVckqRA/maxresdefault.jpg'},  
+]
 export const gridData = [
   "https://img1.hotstarext.com/image/upload/f_auto,t_web_hs_1_5x/sources/r1/cms/prod/1265/701265-h",
   "https://img1.hotstarext.com/image/upload/f_auto,t_web_hs_1_5x/sources/r1/cms/prod/4600/674600-h",

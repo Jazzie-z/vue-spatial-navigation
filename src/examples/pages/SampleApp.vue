@@ -54,7 +54,7 @@ import Settings from './Settings'
 .gradient {
     background-image: linear-gradient(to Bottom, #000000 0%, transparent 100%);
     height: 200px;
-    width: 1000px;
+    width: 100%;
     position: absolute;
     z-index: 1;
     top: -40px;
