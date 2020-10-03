@@ -36,3 +36,4 @@ export default plugin;
 // To allow individual component use, export components
 // each can be registered via Vue.component()
 export * from "@/focusable/index";
+export * from "@/event-bus/index";
