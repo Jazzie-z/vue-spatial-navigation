@@ -1,15 +1,9 @@
 <template>
-    <div>
-Settings page
-    </div>
+  <div>Settings page</div>
 </template>
 
 <script>
-    export default {
-        
-    }
+export default {};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

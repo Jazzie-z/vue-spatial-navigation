@@ -1,15 +1,9 @@
 <template>
-    <div>
-History page
-    </div>
+  <div>History page</div>
 </template>
 
 <script>
-    export default {
-        
-    }
+export default {};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

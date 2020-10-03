@@ -1,12 +1,12 @@
 <script>
-import Vue from 'vue';
-import App from '@/examples/App.vue'
+import Vue from "vue";
+import App from "@/examples/App.vue";
 
 export default Vue.extend({
-  name: 'ServeDev',
+  name: "ServeDev",
   components: {
     App,
-  }
+  },
 });
 </script>
 

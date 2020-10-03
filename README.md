@@ -1,5 +1,7 @@
 # vue-tv(vue-spatial-navigation)
-  Focus library for smart Tv application using Vue js and mitt(event-bus);
+
+Focus library for smart Tv application using Vue js and mitt(event-bus);
+
 - Supports only Vue-2
 
 ## [Live demo](https://vue-spatial-navigation.herokuapp.com/list)
@@ -20,7 +22,9 @@
 ```bash
 npm install vue-tv
 ```
+
 #### List
+
 ```bash
 import {FocusableList} from "vue-tv";
 
@@ -32,16 +36,20 @@ import {FocusableList} from "vue-tv";
   />
 
 ```
+
 #### List with disabled
+
 ```bash
 <List
-    :child="Button" 
-    :isFocused="true" 
-    :items="items" 
+    :child="Button"
+    :isFocused="true"
+    :items="items"
     :disabledIndex=[0,2,3] //index
   />
 ```
+
 #### Nested Carousel
+
 ```bash
 <List
     :child="child"
@@ -51,7 +59,7 @@ import {FocusableList} from "vue-tv";
     orientation="VERTICAL"
   />
   ...
-  
+
   data() {
     return {
       items: [
@@ -71,7 +79,9 @@ import {FocusableList} from "vue-tv";
     };
   },
 ```
+
 #### Grid
+
 ```bash
 <Grid
     :child="Card"
@@ -83,17 +93,18 @@ import {FocusableList} from "vue-tv";
 ```
 
 # Props
-| Name | Type | Required | Description | Default |
-| :- | :- | :- | :- | :- | 
-| `child` | `Vue Component`| `true` | Child widget to display on each index of list/grid |  |
-| `items` | `Array`| `true` | Array to loop through | `[]` |
-| `isFocused` | `Boolean`| `true` | To set focus & make it navigatable | `false` |
-| `defaultIndex` | `int`| `false` | Initial index to be focused | `-1` |
-| `disabled` | `Boolean`| `false` | To disable the navigation | `false` |
-| `disabledIndex` | `Array`| `false` | array of indices to disable in the list | `[-1]` |
-| `orientation` | `enum`| `false` | Direction of list and navigation.['HORIZONTAL','VERTICAL'] | `HORIZONTAL` |
-| `shouldScroll` | `Boolean`| `false` | To make list scroll as you navigate | `false` |
-| `id` | `String`| `false` | Unique Id to handle navigation | Math.random().toString() |
+
+| Name            | Type            | Required | Description                                                | Default                  |
+| :-------------- | :-------------- | :------- | :--------------------------------------------------------- | :----------------------- |
+| `child`         | `Vue Component` | `true`   | Child widget to display on each index of list/grid         |                          |
+| `items`         | `Array`         | `true`   | Array to loop through                                      | `[]`                     |
+| `isFocused`     | `Boolean`       | `true`   | To set focus & make it navigatable                         | `false`                  |
+| `defaultIndex`  | `int`           | `false`  | Initial index to be focused                                | `-1`                     |
+| `disabled`      | `Boolean`       | `false`  | To disable the navigation                                  | `false`                  |
+| `disabledIndex` | `Array`         | `false`  | array of indices to disable in the list                    | `[-1]`                   |
+| `orientation`   | `enum`          | `false`  | Direction of list and navigation.['HORIZONTAL','VERTICAL'] | `HORIZONTAL`             |
+| `shouldScroll`  | `Boolean`       | `false`  | To make list scroll as you navigate                        | `false`                  |
+| `id`            | `String`        | `false`  | Unique Id to handle navigation                             | Math.random().toString() |
 
 ### `Readme will be updated soon!`
 

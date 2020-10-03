@@ -18,7 +18,7 @@ export default {
   },
   data() {
     return {
-      items: carouselData[0].map((item) => ({ items: item, height: '300px' })),
+      items: carouselData[0].map((item) => ({ items: item, height: "300px" })),
       Card: Card,
       shouldScroll: true,
     };
